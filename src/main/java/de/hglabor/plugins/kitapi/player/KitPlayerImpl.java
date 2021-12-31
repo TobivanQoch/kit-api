@@ -7,23 +7,21 @@ import de.hglabor.plugins.kitapi.kit.config.Cooldown;
 import de.hglabor.plugins.kitapi.kit.kits.CopyCatKit;
 import de.hglabor.plugins.kitapi.kit.passives.NonePassive;
 import de.hglabor.plugins.kitapi.pvp.LastHitInformation;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public abstract class KitPlayerImpl implements KitPlayer {
   protected final UUID uuid;
   protected final List<AbstractKit> kits;
+  protected Passive passive;
   protected final Map<String, Object> kitAttributes;
   protected final LastHitInformation lastHitInformation;
   private final List<Long> leftClicks;
-  protected Passive passive;
   protected boolean kitsDisabled;
   protected boolean inInventory;
 
@@ -34,6 +32,40 @@ public abstract class KitPlayerImpl implements KitPlayer {
     this.lastHitInformation = new LastHitInformation();
     this.kits = KitApi.getInstance().emptyKitList();
     this.passive = NonePassive.INSTANCE;
+  }
+
+  int tick = 0;
+
+  @Override
+  public void tick() {
+    for (AbstractKit kit : getKits()) {
+      Cooldown cooldown = getKitCooldown(kit);
+      if (cooldown.hasCooldown()) {
+        long endTimeStamp = cooldown.getEndTime();
+        long currentTimeMillis = System.currentTimeMillis();
+        long remaining = endTimeStamp - currentTimeMillis;
+        if(remaining <= 0) {
+          continue;
+        }
+        float totalCooldown = cooldown.getCooldown();
+        float estimated = totalCooldown-(remaining/1000F);
+        String string = kit.getName() + " " + ChatColor.GRAY + "[";
+        for (int i = 0; i < estimated; i++) {
+          string += ChatColor.GREEN + "|";
+        }
+        for (int i = 0; i < (remaining/1000F); i++) {
+          string += ChatColor.RED + "|";
+        }
+        string += ChatColor.GRAY + "] " + ChatColor.WHITE + ChatColor.ITALIC + remaining/1000 + "s";
+        final String finalString = string; //<--- JAVA MOMENT
+        getBukkitPlayer().ifPresent(player -> player.sendActionBar(Component.text(finalString)));
+      }
+    }
+    if(tick == 20) {
+      tick = 0;
+      return;
+    }
+    tick++;
   }
 
   @Override
@@ -49,12 +81,6 @@ public abstract class KitPlayerImpl implements KitPlayer {
   }
 
   @Override
-  public void setKits(List<AbstractKit> list) {
-    this.kits.clear();
-    this.kits.addAll(list);
-  }
-
-  @Override
   public Passive getPassive() {
     return this.passive;
   }
@@ -62,6 +88,12 @@ public abstract class KitPlayerImpl implements KitPlayer {
   @Override
   public void setPassive(Passive passive) {
     this.passive = passive;
+  }
+
+  @Override
+  public void setKits(List<AbstractKit> list) {
+    this.kits.clear();
+    this.kits.addAll(list);
   }
 
   @Override

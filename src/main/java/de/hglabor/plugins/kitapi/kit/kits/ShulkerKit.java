@@ -12,27 +12,27 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class ShulkerKit extends AbstractKit {
 
-  public static final ShulkerKit INSTANCE = new ShulkerKit();
+    public static final ShulkerKit INSTANCE = new ShulkerKit();
 
-  @FloatArg(min = 0.0F)
-  private final float cooldown;
+    @FloatArg(min = 0.0F)
+    private final float cooldown;
 
-  protected ShulkerKit() {
-    super("Shulker", Material.SHULKER_SHELL);
-    setMainKitItem(getDisplayMaterial());
-    this.cooldown = 13f;
-  }
+    protected ShulkerKit() {
+        super("Shulker", Material.SHULKER_SHELL);
+        setMainKitItem(getDisplayMaterial());
+        this.cooldown = 13f;
+    }
 
-  @Override
-  public float getCooldown() {
-    return cooldown;
-  }
+    @Override
+    public float getCooldown() {
+        return cooldown;
+    }
 
-  @KitEvent
-  @Override
-  public void onPlayerRightClickKitItem(PlayerInteractEvent event, KitPlayer kitPlayer) {
-    Player player = event.getPlayer();
-    player.launchProjectile(ShulkerBullet.class, player.getLocation().getDirection().multiply(2));
-    KitApi.getInstance().getPlayer(player).activateKitCooldown(this);
-  }
+    @KitEvent
+    @Override
+    public void onPlayerRightClickKitItem(PlayerInteractEvent event, KitPlayer kitPlayer) {
+        Player player = event.getPlayer();
+        player.launchProjectile(ShulkerBullet.class, player.getLocation().getDirection().multiply(2));
+        KitApi.getInstance().getPlayer(player).activateKitCooldown(this);
+    }
 }

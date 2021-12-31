@@ -20,6 +20,11 @@ import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.potion.PotionType
 import org.bukkit.util.NumberConversions
+import kotlin.Annotation
+import kotlin.Array
+import kotlin.String
+import kotlin.Suppress
+import kotlin.let
 import kotlin.math.max
 import kotlin.math.min
 

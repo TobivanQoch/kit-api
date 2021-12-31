@@ -1,5 +1,29 @@
 package de.hglabor.plugins.kitapi.kit.kits;
 
+import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent;
+import de.hglabor.plugins.kitapi.KitApi;
+import de.hglabor.plugins.kitapi.kit.AbstractKit;
+import de.hglabor.plugins.kitapi.kit.events.KitEvent;
+import de.hglabor.plugins.kitapi.kit.items.KitItemBuilder;
+import de.hglabor.plugins.kitapi.kit.settings.BetaKit;
+import de.hglabor.plugins.kitapi.kit.settings.DoubleArg;
+import de.hglabor.plugins.kitapi.kit.settings.FloatArg;
+import de.hglabor.plugins.kitapi.kit.settings.IntArg;
+import de.hglabor.plugins.kitapi.player.KitPlayer;
+import de.hglabor.utils.noriskutils.TimeConverter;
+import de.hglabor.utils.noriskutils.pvpbots.PvPBot;
+import net.minecraft.world.damagesource.DamageSource;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 /*
 @BetaKit
 public class AutopilotKit extends AbstractKit implements Listener {

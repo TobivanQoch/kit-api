@@ -12,45 +12,45 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class StomperKit extends AbstractKit {
-  public static final StomperKit INSTANCE = new StomperKit();
-  @DoubleArg
-  private final double radius;
+    public static final StomperKit INSTANCE = new StomperKit();
+    @DoubleArg
+    private final double radius;
 
-  protected StomperKit() {
-    super("Stomper", Material.DIAMOND_BOOTS);
-    radius = 3D;
-  }
-
-  @KitEvent
-  @Override
-  public void onEntityDamage(EntityDamageEvent event) {
-    if (event.getEntity() instanceof Player) {
-      if (!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
-      Player stomper = (Player) event.getEntity();
-      final double STOMPER_DAMAGE = event.getDamage();
-      stomper.playSound(stomper.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 1);
-      if (STOMPER_DAMAGE > 4) {
-        event.setDamage(4);
-      }
-      for (LivingEntity livingEntity : stomper.getWorld().getNearbyEntitiesByType(LivingEntity.class, stomper.getLocation(), radius)) {
-        if (livingEntity == stomper) {
-          continue;
-        }
-        if (livingEntity instanceof Player) {
-          Player playerEntity = (Player) livingEntity;
-          KitPlayer kitPlayer = KitApi.getInstance().getPlayer(playerEntity);
-          if (kitPlayer.isValid()) {
-            if (!playerEntity.isSneaking()) {
-              livingEntity.damage(STOMPER_DAMAGE, stomper);
-            }
-            kitPlayer.getLastHitInformation().setLastDamager(stomper);
-            kitPlayer.getLastHitInformation().setLastDamagerTimestamp(System.currentTimeMillis());
-            playerEntity.playSound(playerEntity.getLocation(), Sound.BLOCK_ANVIL_PLACE, 0.05f, 1);
-          }
-        } else {
-          livingEntity.damage(STOMPER_DAMAGE, stomper);
-        }
-      }
+    protected StomperKit() {
+        super("Stomper", Material.DIAMOND_BOOTS);
+        radius = 3D;
     }
-  }
+
+    @KitEvent
+    @Override
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            if (!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
+            Player stomper = (Player) event.getEntity();
+            final double STOMPER_DAMAGE = event.getDamage();
+            stomper.playSound(stomper.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 1);
+            if (STOMPER_DAMAGE > 4) {
+                event.setDamage(4);
+            }
+            for (LivingEntity livingEntity : stomper.getWorld().getNearbyEntitiesByType(LivingEntity.class, stomper.getLocation(), radius)) {
+                if (livingEntity == stomper) {
+                    continue;
+                }
+                if (livingEntity instanceof Player) {
+                    Player playerEntity = (Player) livingEntity;
+                    KitPlayer kitPlayer = KitApi.getInstance().getPlayer(playerEntity);
+                    if (kitPlayer.isValid()) {
+                        if (!playerEntity.isSneaking()) {
+                            livingEntity.damage(STOMPER_DAMAGE, stomper);
+                        }
+                        kitPlayer.getLastHitInformation().setLastDamager(stomper);
+                        kitPlayer.getLastHitInformation().setLastDamagerTimestamp(System.currentTimeMillis());
+                        playerEntity.playSound(playerEntity.getLocation(), Sound.BLOCK_ANVIL_PLACE, 0.05f, 1);
+                    }
+                } else {
+                    livingEntity.damage(STOMPER_DAMAGE, stomper);
+                }
+            }
+        }
+    }
 }

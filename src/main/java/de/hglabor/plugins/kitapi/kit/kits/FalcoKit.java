@@ -12,7 +12,9 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Phantom;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -21,51 +23,51 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FalcoKit extends AbstractKit implements Listener {
 
-  public static final FalcoKit INSTANCE = new FalcoKit();
+    public static final FalcoKit INSTANCE = new FalcoKit();
 
-  @FloatArg
-  private final float cooldown;
+    @FloatArg
+    private final float cooldown;
 
-  @IntArg
-  private final int flashDuration, flashRadius;
+    @IntArg
+    private final int flashDuration, flashRadius;
 
-  private FalcoKit() {
-    super("Falco", Material.ACACIA_LEAVES);
-    setMainKitItem(getDisplayMaterial());
-    this.cooldown = 60;
-    this.flashDuration = 60;
-    this.flashRadius = 15;
-  }
+    private FalcoKit() {
+        super("Falco", Material.ACACIA_LEAVES);
+        setMainKitItem(getDisplayMaterial());
+        this.cooldown = 60;
+        this.flashDuration = 60;
+        this.flashRadius = 15;
+    }
 
-  @KitEvent
-  @Override
-  public void onPlayerRightClickKitItem(PlayerInteractEvent event, KitPlayer kitPlayer) {
-    kitPlayer.getBukkitPlayer().ifPresent(it -> {
-      Phantom phantom = it.getWorld().spawn(it.getLocation(), Phantom.class);
-      phantom.setShouldBurnInDay(false);
-      phantom.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 25, false, false));
-      phantom.setVelocity(it.getLocation().getDirection().multiply(2));
-      AtomicInteger tick = new AtomicInteger();
-      Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> {
-        phantom.getWorld().playSound(phantom.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1f, 10f);
-      }, 40);
-      Bukkit.getScheduler().runTaskTimer(KitApi.getInstance().getPlugin(), task -> {
-        tick.getAndIncrement();
-        if (tick.get() == flashDuration) {
-          task.cancel();
-          phantom.remove();
-        } else {
-          for (Entity nearby : phantom.getNearbyEntities(flashRadius, flashRadius, flashRadius)) {
-            nearby.getWorld().spawnParticle(Particle.FLASH, nearby.getLocation().clone().add(0, 1, 0), 0);
-          }
-        }
-      }, 40, 1);
-    });
-    kitPlayer.activateKitCooldown(this);
-  }
+    @KitEvent
+    @Override
+    public void onPlayerRightClickKitItem(PlayerInteractEvent event, KitPlayer kitPlayer) {
+        kitPlayer.getBukkitPlayer().ifPresent(it -> {
+            Phantom phantom = it.getWorld().spawn(it.getLocation(), Phantom.class);
+            phantom.setShouldBurnInDay(false);
+            phantom.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 25, false, false));
+            phantom.setVelocity(it.getLocation().getDirection().multiply(2));
+            AtomicInteger tick = new AtomicInteger();
+            Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> {
+                phantom.getWorld().playSound(phantom.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1f, 10f);
+            }, 40);
+            Bukkit.getScheduler().runTaskTimer(KitApi.getInstance().getPlugin(), task -> {
+                tick.getAndIncrement();
+                if(tick.get() == flashDuration) {
+                    task.cancel();
+                    phantom.remove();
+                } else {
+                    for (Entity nearby : phantom.getNearbyEntities(flashRadius, flashRadius, flashRadius)) {
+                        nearby.getWorld().spawnParticle(Particle.FLASH, nearby.getLocation().clone().add(0, 1, 0), 0);
+                    }
+                }
+            }, 40, 1);
+        });
+        kitPlayer.activateKitCooldown(this);
+    }
 
-  @Override
-  public float getCooldown() {
-    return cooldown;
-  }
+    @Override
+    public float getCooldown() {
+        return cooldown;
+    }
 }

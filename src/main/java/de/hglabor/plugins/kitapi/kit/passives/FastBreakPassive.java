@@ -14,32 +14,34 @@ import org.bukkit.potion.PotionEffectType;
 
 public class FastBreakPassive extends Passive implements Listener {
 
-  public static final FastBreakPassive INSTANCE = new FastBreakPassive();
+    public static final FastBreakPassive INSTANCE = new FastBreakPassive();
 
-  @IntArg
-  private final int effectDuration, effectAmpflier;
+    @IntArg
+    private final int effectDuration, effectAmpflier;
 
-  @PotionEffectArg
-  private final PotionEffectType effectType;
+    @PotionEffectArg
+    private final PotionEffectType effectType;
 
-  private FastBreakPassive() {
-    super("FastBreak", Material.NETHERITE_AXE);
-    this.effectDuration = 60;
-    this.effectAmpflier = 2;
-    this.effectType = PotionEffectType.FAST_DIGGING;
-  }
-
-  @EventHandler
-  public void onPlayerLeftClickBlock(PlayerInteractEvent event) {
-    KitPlayer kitPlayer = KitApi.getInstance().getPlayer(event.getPlayer());
-    if (kitPlayer.getPassive().equals(FastBreakPassive.INSTANCE)) {
-      if (event.hasBlock() && event.getClickedBlock() != null) {
-        if (event.getClickedBlock().getType().name().contains("WOOD") || event.getClickedBlock().getType().name().contains("LOG") || event.getClickedBlock().getType().name().contains("STEM")) {
-          kitPlayer.getBukkitPlayer().ifPresent(it -> it.addPotionEffect(new PotionEffect(effectType, effectDuration, effectAmpflier - 1, false, false)));
-        }
-      }
+    private FastBreakPassive() {
+        super("FastBreak", Material.NETHERITE_AXE);
+        this.effectDuration = 60;
+        this.effectAmpflier = 2;
+        this.effectType = PotionEffectType.FAST_DIGGING;
     }
 
-  }
+    @EventHandler
+    public void onPlayerLeftClickBlock(PlayerInteractEvent event) {
+        KitPlayer kitPlayer = KitApi.getInstance().getPlayer(event.getPlayer());
+        if (hasPassive(kitPlayer)) {
+            if (event.hasBlock() && event.getClickedBlock() != null) {
+                if (event.getClickedBlock().getType().name().contains("WOOD") || event.getClickedBlock().getType().name().contains("LOG") || event.getClickedBlock().getType().name().contains("STEM")) {
+                    kitPlayer.getBukkitPlayer().ifPresent(it -> it.addPotionEffect(new PotionEffect(effectType, effectDuration, effectAmpflier - 1, false, false)));
+                }
+            }
+        }
+    }
 
+    private boolean hasPassive(KitPlayer kitPlayer) {
+        return kitPlayer.getPassive().equals(FastBreakPassive.INSTANCE);
+    }
 }

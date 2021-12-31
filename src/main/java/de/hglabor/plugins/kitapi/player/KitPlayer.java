@@ -5,85 +5,89 @@ import de.hglabor.plugins.kitapi.kit.Passive;
 import de.hglabor.plugins.kitapi.kit.config.Cooldown;
 import de.hglabor.plugins.kitapi.pvp.LastHitInformation;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface KitPlayer {
-  List<AbstractKit> getKits();
 
-  void setKits(List<AbstractKit> kits);
+    void tick();
 
-  Passive getPassive();
+    List<AbstractKit> getKits();
 
-  void setPassive(Passive passive);
+    Passive getPassive();
 
-  boolean hasKit(AbstractKit kit);
+    void setKits(List<AbstractKit> kits);
 
-  boolean areKitsDisabled();
+    boolean hasKit(AbstractKit kit);
 
-  boolean isInInventory();
+    boolean areKitsDisabled();
 
-  void setInInventory(boolean value);
+    boolean isInInventory();
 
-  String getName();
+    String getName();
 
-  void setKit(AbstractKit kit, int index);
+    void setInInventory(boolean value);
 
-  LastHitInformation getLastHitInformation();
+    void setKit(AbstractKit kit, int index);
 
-  UUID getUUID();
+    void setPassive(Passive passive);
 
-  Optional<Player> getBukkitPlayer();
+    LastHitInformation getLastHitInformation();
 
-  boolean isValid();
+    UUID getUUID();
 
-  /**
-   * Check if a player is in combat
-   * for specific amount of time
-   *
-   * @param combatTimeLimit The duration limit of the combat in seconds
-   * @return The result of the check
-   */
-  boolean isInCombat(int combatTimeLimit);
+    Optional<Player> getBukkitPlayer();
 
-  /**
-   * Added this method as default
-   * implementation calling the old declaring
-   * of this method to avoid compatibility issues with non-project classes
-   * using this interface
-   * <p>
-   * Please remove and implement in sub-classes if possible
-   * Comment, create an issue or change this yourself if the only time this gets used
-   * is in {@see KitPlayerImpl}
-   * Disclaimer when changing: You may need to refactor every use of this method even
-   * outside this project
-   *
-   * @return The return of the check with default value
-   */
-  default boolean isInCombat() {
-    //Using default value and maximum of old isInCombat
-    return this.isInCombat(10);
-  }
+    boolean isValid();
 
-  void disableKits(boolean shouldDisable);
+    /**
+     * Check if a player is in combat
+     * for specific amount of time
+     *
+     * @param combatTimeLimit The duration limit of the combat in seconds
+     * @return The result of the check
+     */
+    boolean isInCombat(int combatTimeLimit);
 
-  void activateKitCooldown(AbstractKit kit);
+    /**
+     * Added this method as default
+     * implementation calling the old declaring
+     * of this method to avoid compatibility issues with non-project classes
+     * using this interface
+     *
+     * Please remove and implement in sub-classes if possible
+     * Comment, create an issue or change this yourself if the only time this gets used
+     * is in {@see KitPlayerImpl}
+     * Disclaimer when changing: You may need to refactor every use of this method even
+     * outside this project
+     *
+     * @return The return of the check with default value
+     */
+    default boolean isInCombat() {
+        //Using default value and maximum of old isInCombat
+        return this.isInCombat(10);
+    }
 
-  void clearCooldown(AbstractKit kit);
+    void disableKits(boolean shouldDisable);
 
-  Cooldown getKitCooldown(AbstractKit kit);
+    void activateKitCooldown(AbstractKit kit);
 
-  <T> T getKitAttribute(String key);
+    void clearCooldown(AbstractKit kit);
 
-  <T> T getKitAttributeOrDefault(String key, T defaultValue);
+    Cooldown getKitCooldown(AbstractKit kit);
 
-  <T> void putKitAttribute(String key, T value);
+    <T> T getKitAttribute(String key);
 
-  String printKits();
+    <T> T getKitAttributeOrDefault(String key, T defaultValue);
 
-  int getLeftCps();
+    <T> void putKitAttribute(String key, T value);
 
-  void addLeftClick(long value);
+    String printKits();
+
+    int getLeftCps();
+
+    void addLeftClick(long value);
 }

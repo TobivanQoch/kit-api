@@ -1,16 +1,12 @@
 package de.hglabor.plugins.kitapi.kit.settings;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
 public @interface LongArg {
-  long min() default Long.MIN_VALUE;
+    long min() default Long.MIN_VALUE;
 
-  long max() default Long.MAX_VALUE;
+    long max() default Long.MAX_VALUE;
 }

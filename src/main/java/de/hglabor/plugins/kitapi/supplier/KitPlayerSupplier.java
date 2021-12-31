@@ -6,9 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public interface KitPlayerSupplier {
-  KitPlayer getKitPlayer(Player player);
-
-  KitPlayer getKitPlayer(UUID uuid);
-
-  KitPlayer getRandomAlivePlayer();
+    KitPlayer getKitPlayer(Player player);
+    KitPlayer getKitPlayer(UUID uuid);
+    KitPlayer getRandomAlivePlayer();
 }

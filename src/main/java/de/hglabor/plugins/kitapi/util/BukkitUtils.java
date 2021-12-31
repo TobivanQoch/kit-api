@@ -14,44 +14,44 @@ import java.util.Random;
 import java.util.UUID;
 
 public final class BukkitUtils {
-  private BukkitUtils() {
-  }
-
-  public static BukkitTask runTaskLater(Runnable runnable, long delay) {
-    return Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), runnable, delay);
-  }
-
-  public static Material getRandomMaterial() {
-    return Material.values()[new Random().nextInt(Material.values().length)];
-  }
-
-  public static Optional<Player> optionalPlayer(UUID uuid) {
-    return Optional.ofNullable(Bukkit.getPlayer(uuid));
-  }
-
-  public static void setAttributeValue(Player player, Attribute attribute, double value) {
-    AttributeInstance instance = player.getAttribute(attribute);
-    if (instance != null) {
-      instance.setBaseValue(value);
+    private BukkitUtils() {
     }
-  }
 
-  public static void resetAttributeValue(Player player, Attribute attribute) {
-    AttributeInstance instance = player.getAttribute(attribute);
-    if (instance != null) {
-      instance.setBaseValue(instance.getDefaultValue());
+    public static BukkitTask runTaskLater(Runnable runnable, long delay) {
+        return Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), runnable, delay);
     }
-  }
 
-  public static void playSound(Player player, Sound sound) {
-    player.playSound(player.getLocation(), sound, 1, 1);
-  }
+    public static Material getRandomMaterial() {
+        return Material.values()[new Random().nextInt(Material.values().length)];
+    }
 
-  public static void playSound(Player player, Sound sound, float volume) {
-    playSound(player, sound, volume, 1f);
-  }
+    public static Optional<Player> optionalPlayer(UUID uuid) {
+        return Optional.ofNullable(Bukkit.getPlayer(uuid));
+    }
 
-  public static void playSound(Player player, Sound sound, float volume, float pitch) {
-    player.playSound(player.getLocation(), sound, volume, pitch);
-  }
+    public static void setAttributeValue(Player player, Attribute attribute, double value) {
+        AttributeInstance instance = player.getAttribute(attribute);
+        if (instance != null) {
+            instance.setBaseValue(value);
+        }
+    }
+
+    public static void resetAttributeValue(Player player, Attribute attribute) {
+        AttributeInstance instance = player.getAttribute(attribute);
+        if (instance != null) {
+            instance.setBaseValue(instance.getDefaultValue());
+        }
+    }
+
+    public static void playSound(Player player, Sound sound) {
+        player.playSound(player.getLocation(), sound, 1, 1);
+    }
+
+    public static void playSound(Player player, Sound sound, float volume) {
+        playSound(player, sound, volume, 1f);
+    }
+
+    public static void playSound(Player player, Sound sound, float volume, float pitch) {
+        player.playSound(player.getLocation(), sound, volume, pitch);
+    }
 }
