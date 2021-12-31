@@ -12,23 +12,23 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class SnailKit extends AbstractKit {
-    public final static SnailKit INSTANCE = new SnailKit();
+  public final static SnailKit INSTANCE = new SnailKit();
 
-    @IntArg
-    private final int likelihood, effectDuration, effectMultiplier;
+  @IntArg
+  private final int likelihood, effectDuration, effectMultiplier;
 
-    private SnailKit() {
-        super("Snail", Material.SOUL_SOIL);
-        likelihood = 25;
-        effectDuration = 4;
-        effectMultiplier = 0;
+  private SnailKit() {
+    super("Snail", Material.SOUL_SOIL);
+    likelihood = 25;
+    effectDuration = 4;
+    effectMultiplier = 0;
+  }
+
+  @KitEvent
+  @Override
+  public void onPlayerAttacksLivingEntity(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
+    if (ChanceUtils.roll(likelihood)) {
+      entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, effectDuration * 20, effectMultiplier, true, true));
     }
-
-    @KitEvent
-    @Override
-    public void onPlayerAttacksLivingEntity(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
-        if (ChanceUtils.roll(likelihood)) {
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, effectDuration * 20,effectMultiplier, true, true));
-        }
-    }
+  }
 }

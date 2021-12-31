@@ -4,9 +4,9 @@ import de.hglabor.plugins.kitapi.kit.AbstractKit;
 import org.bukkit.Material;
 
 public class NoneKit extends AbstractKit {
-    public final static NoneKit INSTANCE = new NoneKit();
+  public final static NoneKit INSTANCE = new NoneKit();
 
-    private NoneKit() {
-        super("None", Material.STONE_SWORD);
-    }
+  private NoneKit() {
+    super("None", Material.STONE_SWORD);
+  }
 }

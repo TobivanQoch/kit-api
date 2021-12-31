@@ -14,44 +14,44 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class CannibalKit extends AbstractKit {
-    public final static CannibalKit INSTANCE = new CannibalKit();
+  public final static CannibalKit INSTANCE = new CannibalKit();
 
-    @IntArg
-    private final int likelihood, effectDuration, effectMultiplier;
+  @IntArg
+  private final int likelihood, effectDuration, effectMultiplier;
 
-    private CannibalKit() {
-        super("Cannibal", Material.TROPICAL_FISH);
-        effectDuration = 1;
-        effectMultiplier = 1;
-        likelihood = 33;
+  private CannibalKit() {
+    super("Cannibal", Material.TROPICAL_FISH);
+    effectDuration = 1;
+    effectMultiplier = 1;
+    likelihood = 33;
+  }
+
+  @KitEvent
+  @Override
+  public void onPlayerAttacksLivingEntity(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
+    if (!(event.getEntity() instanceof Player)) {
+      return;
+    }
+    if (!(event.getDamager() instanceof Player)) {
+      return;
+    }
+    if (KitApi.getInstance().getPlayer((Player) entity).hasKit(this)) {
+      return;
+    }
+    Player attack = (Player) event.getDamager();
+    Player enemy = ((Player) event.getEntity());
+
+    int foodLevelOfPlayer = attack.getFoodLevel();
+    int foodLevelOfEnemy = enemy.getFoodLevel();
+
+    if (foodLevelOfPlayer < 20) {
+      int difference = 20 - foodLevelOfPlayer;
+      enemy.setFoodLevel(foodLevelOfEnemy - difference);
+      attack.setFoodLevel(foodLevelOfPlayer + difference);
     }
 
-    @KitEvent
-    @Override
-    public void onPlayerAttacksLivingEntity(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
-        if (!(event.getEntity() instanceof Player)) {
-            return;
-        }
-        if (!(event.getDamager() instanceof Player)) {
-            return;
-        }
-        if (KitApi.getInstance().getPlayer((Player) entity).hasKit(this)) {
-            return;
-        }
-        Player attack = (Player) event.getDamager();
-        Player enemy = ((Player) event.getEntity());
-
-        int foodLevelOfPlayer = attack.getFoodLevel();
-        int foodLevelOfEnemy = enemy.getFoodLevel();
-
-        if (foodLevelOfPlayer < 20) {
-            int difference = 20 - foodLevelOfPlayer;
-            enemy.setFoodLevel(foodLevelOfEnemy - difference);
-            attack.setFoodLevel(foodLevelOfPlayer + difference);
-        }
-
-        if (ChanceUtils.roll(likelihood)) {
-            enemy.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, effectDuration * 20, effectMultiplier));
-        }
+    if (ChanceUtils.roll(likelihood)) {
+      enemy.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, effectDuration * 20, effectMultiplier));
     }
+  }
 }

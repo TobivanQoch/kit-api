@@ -11,20 +11,20 @@ import org.bukkit.entity.Player;
 
 public class NMSUtils {
 
-    //noriskutils NMSUtils want a 1.16 packet but i have no bock to update them
+  //noriskutils NMSUtils want a 1.16 packet but i have no bock to update them
 
-    private NMSUtils() {
-    }
+  private NMSUtils() {
+  }
 
-    public static World getWorld(Entity entity) {
-        return ((CraftEntity)entity).getHandle().getWorld();
-    }
+  public static World getWorld(Entity entity) {
+    return ((CraftEntity) entity).getHandle().getWorld();
+  }
 
-    public static void sendPacket(Player player, Packet<?> packet) {
-        ((CraftPlayer)player).getHandle().b.sendPacket(packet);
-    }
+  public static void sendPacket(Player player, Packet<?> packet) {
+    ((CraftPlayer) player).getHandle().b.sendPacket(packet);
+  }
 
-    public static EntityLiving getEntityLiving(LivingEntity entity) {
-        return (EntityLiving)((CraftEntity)entity).getHandle();
-    }
+  public static EntityLiving getEntityLiving(LivingEntity entity) {
+    return (EntityLiving) ((CraftEntity) entity).getHandle();
+  }
 }

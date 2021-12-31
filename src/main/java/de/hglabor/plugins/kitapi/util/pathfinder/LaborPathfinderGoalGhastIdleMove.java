@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class LaborPathfinderGoalGhastIdleMove extends Goal {
   private final Ghast ghast;
+
   public LaborPathfinderGoalGhastIdleMove(Ghast ghast) {
     this.ghast = ghast;
     this.setFlags(EnumSet.of(Goal.Flag.MOVE));

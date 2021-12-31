@@ -1,6 +1,5 @@
 package de.hglabor.plugins.kitapi.kit.kits;
 
-import de.hglabor.plugins.kitapi.KitApi;
 import de.hglabor.plugins.kitapi.kit.AbstractKit;
 import de.hglabor.plugins.kitapi.kit.events.KitEvent;
 import de.hglabor.plugins.kitapi.kit.settings.FloatArg;
@@ -26,58 +25,57 @@ import org.bukkit.potion.PotionType;
 import java.util.Random;
 
 public class SmogmogKit extends AbstractKit implements Listener {
-    public final static SmogmogKit INSTANCE = new SmogmogKit();
-    @FloatArg(min = 0.0F)
-    private final float cooldown, radius;
-    @IntArg
-    private final int effectDuration;
-    @PotionTypeArg
-    private final PotionType potionType;
-    @PotionEffectArg
-    private final PotionEffectType extraPotionEffectType;
+  public final static SmogmogKit INSTANCE = new SmogmogKit();
+  @FloatArg(min = 0.0F)
+  private final float cooldown, radius;
+  @IntArg
+  private final int effectDuration;
+  @PotionTypeArg
+  private final PotionType potionType;
+  @PotionEffectArg
+  private final PotionEffectType extraPotionEffectType;
 
-    private SmogmogKit() {
-        super("Smogmog", Material.POPPED_CHORUS_FRUIT);
-        cooldown = 20;
-        radius = 8F;
-        effectDuration = 3;
-        potionType = PotionType.INSTANT_DAMAGE;
-        extraPotionEffectType = PotionEffectType.BLINDNESS;
-        setMainKitItem(getDisplayMaterial());
-    }
+  private SmogmogKit() {
+    super("Smogmog", Material.POPPED_CHORUS_FRUIT);
+    cooldown = 20;
+    radius = 8F;
+    effectDuration = 3;
+    potionType = PotionType.INSTANT_DAMAGE;
+    extraPotionEffectType = PotionEffectType.BLINDNESS;
+    setMainKitItem(getDisplayMaterial());
+  }
 
-    @KitEvent
-    @Override
-    public void onPlayerRightClickKitItem(PlayerInteractEvent e, KitPlayer kitPlayer) {
-        Player player = e.getPlayer();
-        AreaEffectCloud cloud = (AreaEffectCloud) player.getWorld().spawnEntity(player.getLocation(), EntityType.AREA_EFFECT_CLOUD);
-        cloud.setCustomName(player.getUniqueId().toString());
-        cloud.setColor(Color.fromBGR(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255)));
-        cloud.setDuration(effectDuration * 20);
-        cloud.setSource(player);
-        cloud.setRadius(radius);
-        cloud.setBasePotionData(new PotionData(potionType, false, false));
-        cloud.setRadius(radius);
-        kitPlayer.activateKitCooldown(this);
-        player.getLocation().getWorld().playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 0);
-    }
+  @KitEvent
+  @Override
+  public void onPlayerRightClickKitItem(PlayerInteractEvent e, KitPlayer kitPlayer) {
+    Player player = e.getPlayer();
+    AreaEffectCloud cloud = (AreaEffectCloud) player.getWorld().spawnEntity(player.getLocation(), EntityType.AREA_EFFECT_CLOUD);
+    cloud.setCustomName(player.getUniqueId().toString());
+    cloud.setColor(Color.fromBGR(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255)));
+    cloud.setDuration(effectDuration * 20);
+    cloud.setSource(player);
+    cloud.setRadius(radius);
+    cloud.setBasePotionData(new PotionData(potionType, false, false));
+    cloud.setRadius(radius);
+    kitPlayer.activateKitCooldown(this);
+    player.getLocation().getWorld().playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 0);
+  }
 
-    @EventHandler
-    public void onAreaEffectCloudDamage(EntityDamageByEntityEvent e) {
-        if (e.getEntity() instanceof Player && e.getDamager() instanceof AreaEffectCloud) {
-            Player involved = (Player) e.getEntity();
-            AreaEffectCloud cloud = (AreaEffectCloud) e.getDamager();
-            if (involved.getUniqueId().toString().equals(cloud.getCustomName())) {
-                e.setCancelled(true);
-            }
-            else {
-                involved.addPotionEffect(new PotionEffect(extraPotionEffectType, effectDuration * 20, 0));
-            }
-        }
+  @EventHandler
+  public void onAreaEffectCloudDamage(EntityDamageByEntityEvent e) {
+    if (e.getEntity() instanceof Player && e.getDamager() instanceof AreaEffectCloud) {
+      Player involved = (Player) e.getEntity();
+      AreaEffectCloud cloud = (AreaEffectCloud) e.getDamager();
+      if (involved.getUniqueId().toString().equals(cloud.getCustomName())) {
+        e.setCancelled(true);
+      } else {
+        involved.addPotionEffect(new PotionEffect(extraPotionEffectType, effectDuration * 20, 0));
+      }
     }
+  }
 
-    @Override
-    public float getCooldown() {
-        return cooldown;
-    }
+  @Override
+  public float getCooldown() {
+    return cooldown;
+  }
 }

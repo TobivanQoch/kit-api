@@ -24,63 +24,63 @@ import org.bukkit.util.Vector;
 
 
 public class ClawKit extends AbstractKit implements Listener {
-    public final static ClawKit INSTANCE = new ClawKit();
-    @FloatArg(min = 0.0F)
-    private final float cooldown;
-    @IntArg
-    private final int radius, potionDuration, potionMultiplier;
-    @EntityArg
-    private final EntityType entityType;
-    @PotionEffectArg
-    private final PotionEffectType potionType;
+  public final static ClawKit INSTANCE = new ClawKit();
+  @FloatArg(min = 0.0F)
+  private final float cooldown;
+  @IntArg
+  private final int radius, potionDuration, potionMultiplier;
+  @EntityArg
+  private final EntityType entityType;
+  @PotionEffectArg
+  private final PotionEffectType potionType;
 
-    private ClawKit() {
-        super("Claw", Material.SHEARS);
-        cooldown = 12F;
-        setMainKitItem(getDisplayMaterial(), true);
-        radius = 15;
-        entityType = EntityType.EVOKER_FANGS;
-        potionType = PotionEffectType.SLOW;
-        potionDuration = 5;
-        potionMultiplier = 10;
+  private ClawKit() {
+    super("Claw", Material.SHEARS);
+    cooldown = 12F;
+    setMainKitItem(getDisplayMaterial(), true);
+    radius = 15;
+    entityType = EntityType.EVOKER_FANGS;
+    potionType = PotionEffectType.SLOW;
+    potionDuration = 5;
+    potionMultiplier = 10;
+  }
+
+  @KitEvent
+  @Override
+  public void onPlayerRightClickKitItem(PlayerInteractEvent event, KitPlayer kitPlayer) {
+    Player player = event.getPlayer();
+    KitPlayer hgPlayer = KitApi.getInstance().getPlayer(player);
+
+    Location start = player.getLocation();
+    Location start2 = player.getLocation().add(0, 2, 0);
+    Vector direction = start.getDirection();
+
+    for (int i = 1; i <= radius; i++) {
+      player.getWorld().spawnEntity(start.clone().add(direction.clone().multiply(i)), entityType).setMetadata(player.getUniqueId().toString(), new FixedMetadataValue(KitApi.getInstance().getPlugin(), ""));
+      player.getWorld().spawnEntity(start2.clone().add(direction.clone().multiply(i)), entityType).setMetadata(player.getUniqueId().toString(), new FixedMetadataValue(KitApi.getInstance().getPlugin(), ""));
     }
 
-    @KitEvent
-    @Override
-    public void onPlayerRightClickKitItem(PlayerInteractEvent event, KitPlayer kitPlayer) {
-        Player player = event.getPlayer();
-        KitPlayer hgPlayer = KitApi.getInstance().getPlayer(player);
+    hgPlayer.activateKitCooldown(this);
+  }
 
-        Location start = player.getLocation();
-        Location start2 = player.getLocation().add(0, 2, 0);
-        Vector direction = start.getDirection();
-
-        for (int i = 1; i <= radius; i++) {
-            player.getWorld().spawnEntity(start.clone().add(direction.clone().multiply(i)), entityType).setMetadata(player.getUniqueId().toString(), new FixedMetadataValue(KitApi.getInstance().getPlugin(), ""));
-            player.getWorld().spawnEntity(start2.clone().add(direction.clone().multiply(i)), entityType).setMetadata(player.getUniqueId().toString(), new FixedMetadataValue(KitApi.getInstance().getPlugin(), ""));
+  @EventHandler
+  public void onDamage(EntityDamageByEntityEvent event) {
+    Entity damager = event.getDamager();
+    if (event.getEntity() instanceof Player && damager.getType().equals(entityType)) {
+      Player player = (Player) event.getEntity();
+      KitPlayer kitPlayer = KitApi.getInstance().getPlayer(player);
+      if (kitPlayer.isValid()) {
+        if (damager.hasMetadata(player.getUniqueId().toString())) {
+          event.setCancelled(true);
+        } else {
+          player.addPotionEffect(new PotionEffect(potionType, 20 * potionDuration, potionMultiplier));
         }
-
-        hgPlayer.activateKitCooldown(this);
+      }
     }
+  }
 
-    @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
-        Entity damager = event.getDamager();
-        if (event.getEntity() instanceof Player && damager.getType().equals(entityType)) {
-            Player player = (Player) event.getEntity();
-            KitPlayer kitPlayer = KitApi.getInstance().getPlayer(player);
-            if(kitPlayer.isValid()) {
-                if (damager.hasMetadata(player.getUniqueId().toString())) {
-                    event.setCancelled(true);
-                } else {
-                    player.addPotionEffect(new PotionEffect(potionType, 20 * potionDuration, potionMultiplier));
-                }
-            }
-        }
-    }
-
-    @Override
-    public float getCooldown() {
-        return cooldown;
-    }
+  @Override
+  public float getCooldown() {
+    return cooldown;
+  }
 }

@@ -12,30 +12,30 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class BoxerKit extends AbstractKit {
 
-    public static final BoxerKit INSTANCE = new BoxerKit();
-    private final static String FIST = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmQ3ZjZhODk3NjFlYTU4MzkxYzljMTllMzdhYjBmOThkMjYzMmIzN2NkZGFiZDdmMDEzODUzNDNjZmY0N2M1MyJ9fX0=";
+  public static final BoxerKit INSTANCE = new BoxerKit();
+  private final static String FIST = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmQ3ZjZhODk3NjFlYTU4MzkxYzljMTllMzdhYjBmOThkMjYzMmIzN2NkZGFiZDdmMDEzODUzNDNjZmY0N2M1MyJ9fX0=";
 
-    @DoubleArg
-    private final double damageMultiplier;
+  @DoubleArg
+  private final double damageMultiplier;
 
-    private BoxerKit() {
-        super("Boxer", new KitItemBuilder(Material.PLAYER_HEAD).setPlayerSkullSkin(FIST).build());
-        damageMultiplier = 0.025D;
+  private BoxerKit() {
+    super("Boxer", new KitItemBuilder(Material.PLAYER_HEAD).setPlayerSkullSkin(FIST).build());
+    damageMultiplier = 0.025D;
+  }
+
+  @KitEvent
+  @Override
+  public void onPlayerAttacksLivingEntity(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
+    if (attacker.getBukkitPlayer().isPresent()) {
+      if (attacker.getBukkitPlayer().get().getInventory().getItemInMainHand().getType() == Material.AIR) {
+        event.setDamage(5);
+      }
     }
+  }
 
-    @KitEvent
-    @Override
-    public void onPlayerAttacksLivingEntity(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
-        if(attacker.getBukkitPlayer().isPresent()) {
-            if(attacker.getBukkitPlayer().get().getInventory().getItemInMainHand().getType() == Material.AIR) {
-                event.setDamage(5);
-            }
-        }
-    }
-
-    @KitEvent
-    @Override
-    public void onPlayerGetsAttackedByLivingEntity(EntityDamageByEntityEvent event, Player player, LivingEntity attacker) {
-        event.setDamage(event.getDamage() * damageMultiplier);
-    }
+  @KitEvent
+  @Override
+  public void onPlayerGetsAttackedByLivingEntity(EntityDamageByEntityEvent event, Player player, LivingEntity attacker) {
+    event.setDamage(event.getDamage() * damageMultiplier);
+  }
 }
