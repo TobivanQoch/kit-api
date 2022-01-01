@@ -71,13 +71,13 @@ java {
   withJavadocJar()
 }
 
+/*
 signing {
-  sign(publishing.publications)
+  sign(publishing.publications) <----- what even is this and why is it failing
 }
+ */
 
 publishing {
-
-
     kotlin.runCatching {
       repositories {
         maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
