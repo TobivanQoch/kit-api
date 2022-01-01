@@ -24,7 +24,7 @@ public class JellyfishKit extends AbstractKit implements Listener {
   public static final JellyfishKit INSTANCE = new JellyfishKit();
 
   @IntArg
-  private final long waterRemoveDeleay;
+  private final int waterRemoveDeleay;
   @IntArg
   private final int maxUses;
   @FloatArg(min = 0.0F)
@@ -36,7 +36,7 @@ public class JellyfishKit extends AbstractKit implements Listener {
     super("Jellyfish", Material.PUFFERFISH_BUCKET);
     maxUses = 10;
     cooldown = 30F;
-    waterRemoveDeleay = 50L;
+    waterRemoveDeleay = 50;
     liquidMaterial = Material.WATER;
   }
 
@@ -48,9 +48,7 @@ public class JellyfishKit extends AbstractKit implements Listener {
     Player player = event.getPlayer();
     Material type = event.getClickedBlock().getType();
     event.getClickedBlock().getRelative(BlockFace.UP).setType(liquidMaterial);
-    Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> {
-      event.getClickedBlock().setType(type);
-    }, waterRemoveDeleay);
+    Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> event.getClickedBlock().setType(type), waterRemoveDeleay);
     event.getClickedBlock().setMetadata(WATER_KEY, new FixedMetadataValue(KitApi.getInstance().getPlugin(),true));
     KitApi.getInstance().checkUsesForCooldown(player, this, maxUses);
   }
