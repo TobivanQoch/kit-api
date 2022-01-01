@@ -20,7 +20,7 @@ public class BoxerKit extends AbstractKit {
 
   private BoxerKit() {
     super("Boxer", new KitItemBuilder(Material.PLAYER_HEAD).setPlayerSkullSkin(FIST).build());
-    damageMultiplier = 0.025D;
+    damageMultiplier = 0.5D;
   }
 
   @KitEvent
