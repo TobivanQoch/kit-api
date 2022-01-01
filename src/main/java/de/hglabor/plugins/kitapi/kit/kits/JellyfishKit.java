@@ -14,7 +14,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -46,9 +45,8 @@ public class JellyfishKit extends AbstractKit implements Listener {
   @Override
   public void onPlayerRightClicksBlock(PlayerInteractEvent event, KitPlayer kitPlayer, Block block) {
     Player player = event.getPlayer();
-    Material type = event.getClickedBlock().getType();
     event.getClickedBlock().getRelative(BlockFace.UP).setType(liquidMaterial);
-    Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> event.getClickedBlock().setType(type), waterRemoveDeleay);
+    Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> event.getClickedBlock().setType(Material.AIR), waterRemoveDeleay);
     event.getClickedBlock().setMetadata(WATER_KEY, new FixedMetadataValue(KitApi.getInstance().getPlugin(),true));
     KitApi.getInstance().checkUsesForCooldown(player, this, maxUses);
   }
@@ -59,7 +57,7 @@ public class JellyfishKit extends AbstractKit implements Listener {
   }
 
   @EventHandler
-  @KitEvent(ignoreCooldown = true)
+  @KitEvent(ignoreCooldown = true, clazz = BlockFromToEvent.class)
   public void onBlockFromTo(BlockFromToEvent event) {
     if(event.getBlock().getType() == liquidMaterial) {
       if(event.getBlock().hasMetadata(WATER_KEY)) {
