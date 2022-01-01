@@ -5,9 +5,12 @@ import de.hglabor.plugins.kitapi.kit.AbstractKit;
 import de.hglabor.plugins.kitapi.kit.events.KitEvent;
 import de.hglabor.plugins.kitapi.kit.settings.FloatArg;
 import de.hglabor.plugins.kitapi.kit.settings.IntArg;
+import de.hglabor.plugins.kitapi.kit.settings.MaterialArg;
 import de.hglabor.plugins.kitapi.player.KitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,32 +29,25 @@ public class JellyfishKit extends AbstractKit implements Listener {
   private final int maxUses;
   @FloatArg(min = 0.0F)
   private final float cooldown;
+  @MaterialArg
+  private final Material liquidMaterial;
 
   private JellyfishKit() {
     super("Jellyfish", Material.PUFFERFISH_BUCKET);
     maxUses = 10;
     cooldown = 30F;
     waterRemoveDeleay = 50L;
+    liquidMaterial = Material.WATER;
   }
 
   private static final String WATER_KEY = "jellyfishWater";
 
-  @EventHandler
   @KitEvent
-  public void onPlayerInteract(PlayerInteractEvent event) {
+  @Override
+  public void onPlayerRightClicksBlock(PlayerInteractEvent event, KitPlayer kitPlayer, Block block) {
     Player player = event.getPlayer();
-    KitPlayer kitPlayer = KitApi.getInstance().getPlayer(player);
-    if(!kitPlayer.hasKit(this)) {
-      return;
-    }
-    if(event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) {
-      return;
-    }
-    if(event.getClickedBlock() == null) {
-      return;
-    }
     Material type = event.getClickedBlock().getType();
-    event.getClickedBlock().setType(Material.WATER);
+    event.getClickedBlock().getRelative(BlockFace.UP).setType(liquidMaterial);
     Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> {
       event.getClickedBlock().setType(type);
     }, waterRemoveDeleay);
@@ -67,7 +63,7 @@ public class JellyfishKit extends AbstractKit implements Listener {
   @EventHandler
   @KitEvent(ignoreCooldown = true)
   public void onBlockFromTo(BlockFromToEvent event) {
-    if(event.getBlock().getType() == Material.WATER) {
+    if(event.getBlock().getType() == liquidMaterial) {
       if(event.getBlock().hasMetadata(WATER_KEY)) {
         event.setCancelled(true);
       }

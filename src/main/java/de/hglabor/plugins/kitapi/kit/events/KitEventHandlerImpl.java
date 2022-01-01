@@ -7,6 +7,7 @@ import de.hglabor.plugins.kitapi.kit.events.event.PlayerAteSoupEvent;
 import de.hglabor.plugins.kitapi.player.KitPlayer;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -201,6 +202,17 @@ public class KitEventHandlerImpl extends KitEventHandler implements Listener {
       ItemStack kitItem = event.getItem() != null ? event.getItem() : new ItemStack(Material.AIR);
       useOneOfMultipleKitItems(event, kitPlayer, kitItem, kit -> kit.onPlayerRightClicksOneOfMultipleKitItems(event, kitPlayer, kitItem));
       useKitItem(event, kitPlayer, kit -> kit.onPlayerRightClickKitItem(event, kitPlayer));
+    }
+  }
+
+  @EventHandler
+  public void onPlayerRightCliskBlock(PlayerInteractEvent event) {
+    if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+      if(event.getClickedBlock() == null) {
+        return;
+      }
+      KitPlayer kitPlayer = playerSupplier.getKitPlayer(event.getPlayer());
+      useKit(event, kitPlayer, kit -> kit.onPlayerRightClicksBlock(event, kitPlayer, event.getClickedBlock()));
     }
   }
 

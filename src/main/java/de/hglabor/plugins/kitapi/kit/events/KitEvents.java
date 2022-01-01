@@ -3,6 +3,7 @@ package de.hglabor.plugins.kitapi.kit.events;
 import de.hglabor.plugins.kitapi.kit.events.event.PlayerAteSoupEvent;
 import de.hglabor.plugins.kitapi.player.KitPlayer;
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -111,5 +112,8 @@ public abstract class KitEvents {
   }
 
   public void onProjectileHitEvent(ProjectileHitEvent event, KitPlayer kitPlayer, Entity hitEntity) {
+  }
+
+  public void onPlayerRightClicksBlock(PlayerInteractEvent event, KitPlayer kitPlayer, Block block) {
   }
 }
