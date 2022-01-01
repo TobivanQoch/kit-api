@@ -65,6 +65,7 @@ public class JellyfishKit extends AbstractKit implements Listener {
   }
 
   @EventHandler
+  @KitEvent(ignoreCooldown = true)
   public void onBlockFromTo(BlockFromToEvent event) {
     if(event.getBlock().getType() == Material.WATER) {
       if(event.getBlock().hasMetadata(WATER_KEY)) {
