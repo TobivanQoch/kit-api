@@ -46,7 +46,7 @@ public class JellyfishKit extends AbstractKit implements Listener {
   public void onPlayerRightClicksBlock(PlayerInteractEvent event, KitPlayer kitPlayer, Block block) {
     Player player = event.getPlayer();
     event.getClickedBlock().getRelative(BlockFace.UP).setType(liquidMaterial);
-    Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> event.getClickedBlock().setType(Material.AIR), waterRemoveDeleay);
+    Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> event.getClickedBlock().getRelative(BlockFace.UP).setType(Material.AIR), waterRemoveDeleay);
     event.getClickedBlock().setMetadata(WATER_KEY, new FixedMetadataValue(KitApi.getInstance().getPlugin(),true));
     KitApi.getInstance().checkUsesForCooldown(player, this, maxUses);
   }
