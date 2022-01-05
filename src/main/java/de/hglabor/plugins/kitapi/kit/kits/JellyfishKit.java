@@ -18,6 +18,8 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.ArrayList;
+
 public class JellyfishKit extends AbstractKit implements Listener {
 
   public static final JellyfishKit INSTANCE = new JellyfishKit();
@@ -39,15 +41,18 @@ public class JellyfishKit extends AbstractKit implements Listener {
     liquidMaterial = Material.WATER;
   }
 
-  private static final String WATER_KEY = "jellyfishWater";
+  private static final ArrayList<Block> WATER_BLOCKS = new ArrayList<>();
 
   @KitEvent
   @Override
   public void onPlayerRightClicksBlock(PlayerInteractEvent event, KitPlayer kitPlayer, Block block) {
     Player player = event.getPlayer();
     event.getClickedBlock().getRelative(BlockFace.UP).setType(liquidMaterial);
-    Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> event.getClickedBlock().getRelative(BlockFace.UP).setType(Material.AIR), waterRemoveDeleay);
-    event.getClickedBlock().setMetadata(WATER_KEY, new FixedMetadataValue(KitApi.getInstance().getPlugin(),true));
+    Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> {
+      event.getClickedBlock().getRelative(BlockFace.UP).setType(Material.AIR);
+      WATER_BLOCKS.remove(event.getClickedBlock().getRelative(BlockFace.UP));
+    }, waterRemoveDeleay);
+    WATER_BLOCKS.add(event.getClickedBlock().getRelative(BlockFace.UP));
     KitApi.getInstance().checkUsesForCooldown(player, this, maxUses);
   }
 
@@ -60,7 +65,7 @@ public class JellyfishKit extends AbstractKit implements Listener {
   @KitEvent(ignoreCooldown = true, clazz = BlockFromToEvent.class)
   public void onBlockFromTo(BlockFromToEvent event) {
     if(event.getBlock().getType() == liquidMaterial) {
-      if(event.getBlock().hasMetadata(WATER_KEY)) {
+      if(WATER_BLOCKS.contains(event.getBlock())) {
         event.setCancelled(true);
       }
     }
