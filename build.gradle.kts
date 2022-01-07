@@ -74,11 +74,11 @@ java {
   withJavadocJar()
 }
 
-/*
+
 signing {
-  sign(publishing.publications) <----- what even is this and why is it failing
+  sign(publishing.publications)
 }
- */
+
 
 publishing {
     kotlin.runCatching {
