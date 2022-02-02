@@ -4,15 +4,15 @@ import java.util.concurrent.TimeUnit
 import java.nio.file.Files
 
 val repo = "HGLabor/kit-api"
-val javaVersion = "16"
-val mcVersion = "1.17.1"
+val javaVersion = "17"
+val mcVersion = "1.18.1"
 
 group = "de.hglabor"
-version = "${mcVersion}_v2"
+version = "${mcVersion}_v1"
 description = "kit api for hglabor network"
 
 java.targetCompatibility = JavaVersion.valueOf("VERSION_${javaVersion.replace(".", "_")}")
-java.sourceCompatibility = JavaVersion.VERSION_16
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 plugins {
   kotlin("jvm") version "1.6.10"
@@ -22,7 +22,7 @@ plugins {
   signing
 
   kotlin("plugin.serialization") version "1.6.0"
-  id("io.papermc.paperweight.userdev") version "1.2.0"
+  id("io.papermc.paperweight.userdev") version "1.3.4"
 }
 
 repositories {
@@ -43,7 +43,7 @@ repositories {
 dependencies {
   paperDevBundle("$mcVersion-R0.1-SNAPSHOT")
   compileOnly("io.papermc.paper:paper-api:$mcVersion-R0.1-SNAPSHOT")
-  compileOnly("net.axay:kspigot:1.17.4")
+  compileOnly("net.axay:kspigot:1.18.0")
   compileOnly("org.apache.commons:commons-lang3:3.12.0")
   compileOnly("LibsDisguises:LibsDisguises:10.0.23")
   compileOnly("de.hglabor:localization:0.0.7")

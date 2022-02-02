@@ -1,5 +1,5 @@
 package de.hglabor.plugins.kitapi.command
-
+/*
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import de.hglabor.plugins.kitapi.KitApi
@@ -199,3 +199,4 @@ object KitSettingsCommand {
     return names
   }
 }
+*/
