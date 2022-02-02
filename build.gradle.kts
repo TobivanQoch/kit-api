@@ -74,11 +74,9 @@ java {
   withJavadocJar()
 }
 
-
 signing {
   sign(publishing.publications)
 }
-
 
 publishing {
     kotlin.runCatching {
@@ -104,40 +102,6 @@ publishing {
       this.groupId = project.group.toString()
       this.artifactId = project.name.toLowerCase()
       this.version = project.version.toString()
-
-      pom {
-        name.set(project.name)
-        description.set(project.description)
-
-        developers {
-          developer {
-            name.set("copyandexecute")
-          }
-        }
-
-        licenses {
-          license {
-            name.set("GNU General Public License, Version 3")
-            url.set("https://www.gnu.org/licenses/gpl-3.0.en.html")
-          }
-        }
-
-        url.set("https://github.com/${repo}")
-
-        scm {
-          connection.set("scm:git:git://github.com/${repo}.git")
-          url.set("https://github.com/${repo}/tree/main")
-        }
-      }
-    }
-    create<MavenPublication>("${project.name}Local") {
-      artifact(tasks.reobfJar)
-      artifact(tasks.named("javadocJar"))
-      artifact(tasks.named("sourcesJar"))
-
-      this.groupId = project.group.toString()
-      this.artifactId = project.name.toLowerCase()
-      this.version = "${mcVersion}_LOCAL"
 
       pom {
         name.set(project.name)
