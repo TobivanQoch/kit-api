@@ -9,12 +9,15 @@ import de.hglabor.plugins.kitapi.kit.settings.BetaKit;
 import de.hglabor.plugins.kitapi.kit.settings.FloatArg;
 import de.hglabor.plugins.kitapi.kit.settings.IntArg;
 import de.hglabor.plugins.kitapi.kit.settings.ParticleArg;
+import de.hglabor.plugins.kitapi.kit.settings.SoundArg;
 import de.hglabor.plugins.kitapi.player.KitPlayer;
+import de.hglabor.plugins.kitapi.util.Logger;
 import de.hglabor.utils.noriskutils.TimeConverter;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,6 +39,8 @@ public class GhostKit extends AbstractKit implements Listener {
   private final int transformationParticleAmount, transformationParticleLoopAmount, trailParticleAmount, transformationInSeconds;
   @ParticleArg
   private final Particle particle;
+  @SoundArg
+  private final Sound sound;
 
   private GhostKit() {
     super("Ghost");
@@ -50,16 +55,17 @@ public class GhostKit extends AbstractKit implements Listener {
     this.trailParticleAmount = 5;
     this.transformationInSeconds = 5;
     this.particle = Particle.WHITE_ASH;
+    this.sound = Sound.ENTITY_VEX_AMBIENT;
   }
 
   @Override
   public void onEnable(KitPlayer kitPlayer) {
-    kitPlayer.getBukkitPlayer().ifPresent(player -> player.setSilent(true));
+    //kitPlayer.getBukkitPlayer().ifPresent(player -> player.setSilent(true));
   }
 
   @Override
   public void onDisable(KitPlayer kitPlayer) {
-    kitPlayer.getBukkitPlayer().ifPresent(player -> player.setSilent(false));
+    //kitPlayer.getBukkitPlayer().ifPresent(player -> player.setSilent(false));
     GhostMode task = kitPlayer.getKitAttribute(ghostModeTaskKey);
     if (task != null) {
       task.end();
@@ -67,13 +73,11 @@ public class GhostKit extends AbstractKit implements Listener {
   }
 
   @KitEvent
-  @Override
   public void onPlayerLeftClickKitItem(PlayerInteractEvent event, KitPlayer kitPlayer) {
     doGhostTransformation(kitPlayer);
   }
 
   @KitEvent
-  @Override
   public void onPlayerRightClickKitItem(PlayerInteractEvent event, KitPlayer kitPlayer) {
     doGhostTransformation(kitPlayer);
   }
@@ -150,6 +154,12 @@ public class GhostKit extends AbstractKit implements Listener {
         end();
         return;
       }
+
+      player.getNearbyEntities(10, 10, 10).stream().filter(Player.class::isInstance).forEach(entity -> {
+        Logger.debug(entity.getName());
+        entity.getWorld().playSound(player, sound, 1F, 1F);
+      });
+      player.playSound(player, sound, 1F, 1F);
 
       player.sendActionBar("Ghost-Mode endet in: " + TimeConverter.stringify(timeLeft));
       counter++;
