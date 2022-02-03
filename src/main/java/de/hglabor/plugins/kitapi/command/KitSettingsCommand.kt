@@ -2,6 +2,7 @@ package de.hglabor.plugins.kitapi.command
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import de.hglabor.plugins.kitapi.KitApi
+import de.hglabor.plugins.kitapi.config.KitApiConfig
 import de.hglabor.plugins.kitapi.kit.AbstractKit
 import de.hglabor.plugins.kitapi.kit.kits.NoneKit
 import de.hglabor.plugins.kitapi.kit.settings.*
@@ -114,7 +115,12 @@ object KitSettingsCommand {
           }
         }
       }
-
+      literal("debug") {
+        runs {
+          KitApiConfig.isDebug = !KitApiConfig.isDebug
+          this.player.sendMessage("Debug ist ${KitApiConfig.isDebug}")
+        }
+      }
     }
   }
 

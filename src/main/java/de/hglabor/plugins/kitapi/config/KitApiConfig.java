@@ -174,6 +174,8 @@ public final class KitApiConfig {
     return kitConfiguration.getBoolean(key);
   }
 
+  public static boolean isDebug = false;
+
   public int getKitAmount() {
     return kitConfiguration.getInt("kit.amount");
   }

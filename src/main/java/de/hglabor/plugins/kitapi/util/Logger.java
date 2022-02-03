@@ -8,21 +8,21 @@ public final class Logger {
   }
 
   public static void debug(double message) {
-    if (KitApiConfig.getInstance().getBoolean("debug")) {
+    if (KitApiConfig.isDebug) {
       System.out.println(message);
       Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("hglabor.debug") || player.isOp()).forEach(player -> player.sendMessage(String.valueOf(message)));
     }
   }
 
   public static void debug(int message) {
-    if (KitApiConfig.getInstance().getBoolean("debug")) {
+    if (KitApiConfig.isDebug) {
       System.out.println(message);
       Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("hglabor.debug") || player.isOp()).forEach(player -> player.sendMessage(String.valueOf(message)));
     }
   }
 
   public static void debug(String message) {
-    if (KitApiConfig.getInstance().getBoolean("debug")) {
+    if (KitApiConfig.isDebug) {
       System.out.println(message);
       Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("hglabor.debug") || player.isOp()).forEach(player -> player.sendMessage(message));
     }
