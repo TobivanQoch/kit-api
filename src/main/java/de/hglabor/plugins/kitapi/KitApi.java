@@ -1,5 +1,6 @@
 package de.hglabor.plugins.kitapi;
 
+import de.hglabor.plugins.kitapi.command.KitSettingsCommand;
 import de.hglabor.plugins.kitapi.config.KitApiConfig;
 import de.hglabor.plugins.kitapi.kit.AbstractKit;
 import de.hglabor.plugins.kitapi.kit.Passive;
@@ -231,6 +232,7 @@ public final class KitApi {
         getPlayer(player).tick();
       }
     }, 0, 1L);
+    KitSettingsCommand.INSTANCE.enable();
   }
 
   private void registerKits() {
