@@ -39,6 +39,9 @@ public abstract class KitEventHandler extends KitEvents {
     }
 
     Logger.debug(String.format("%s, %s", kit.getName(), event.getEventName()));
+    kit.getKitEvents().forEach(kitEventInfo -> {
+      Logger.debug(String.format("%s, %s", kit.getName(), kitEventInfo.getEvent().getName()));
+    });
     //other events will be also triggered like playermoveevent and print cooldown
     if (kit.getKitEvents().stream().noneMatch(kitEventInfo -> kitEventInfo.getEvent().equals(event.getClass()))) {
       //Complete Garbage I hope this doesnt break something
@@ -59,6 +62,8 @@ public abstract class KitEventHandler extends KitEvents {
       player.sendActionBar(Localization.INSTANCE.getMessage("kit.disabled", ChatUtils.locale(player)));
       return true;
     }
+
+    Logger.debug(String.format("%s, %s §aSUCCESSFULL - CHECK BASIC", kit.getName(), event.getEventName()));
     return false;
   }
 
