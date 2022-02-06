@@ -8,7 +8,7 @@ val javaVersion = "17"
 val mcVersion = "1.18.1"
 
 group = "de.hglabor"
-version = "${mcVersion}_v1"
+version = "${mcVersion}_v2"
 description = "kit api for hglabor network"
 
 java.targetCompatibility = JavaVersion.valueOf("VERSION_${javaVersion.replace(".", "_")}")
@@ -79,6 +79,18 @@ signing {
 }
 
 publishing {
+  publications {
+    create<MavenPublication>("maven") {
+      this.groupId = project.group.toString()
+      this.artifactId = project.name.toLowerCase()
+      this.version = project.version.toString()
+      from(components["java"])
+    }
+  }
+}
+
+/*
+publishing {
     kotlin.runCatching {
       repositories {
         maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
@@ -130,4 +142,4 @@ publishing {
     }
   }
 }
-
+*/
