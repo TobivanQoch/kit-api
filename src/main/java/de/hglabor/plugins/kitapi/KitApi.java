@@ -208,6 +208,7 @@ public final class KitApi {
     kits.add(FrostyKit.INSTANCE);
     kits.add(RedstonerKit.INSTANCE);
     kits.add(JellyfishKit.INSTANCE);
+    kits.add(SpyKit.INSTANCE);
 
 
     kits.add(NonePassive.INSTANCE);
