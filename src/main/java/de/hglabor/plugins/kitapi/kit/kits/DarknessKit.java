@@ -56,6 +56,7 @@ public class DarknessKit extends AbstractKit {
             continue;
           }
           if(nearby.getTargetEntity(radius).getUniqueId() == player.getUniqueId()) {
+            nearby.getWorld().spawnParticle(Particle.REDSTONE, nearby.getEyeLocation(), 5, new Particle.DustOptions(Color.BLACK, 3f));
             nearby.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, 30, 2, false, false));
             nearby.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 30, 2, false, false));
           }
