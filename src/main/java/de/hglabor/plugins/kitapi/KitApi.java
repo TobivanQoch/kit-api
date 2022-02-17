@@ -185,7 +185,7 @@ public final class KitApi {
     kits.add(RefillKit.INSTANCE);
     //kits.add(SwordmanKit.INSTANCE);
     kits.add(BearKit.INSTANCE);
-    //kits.add(MagicianKit.INSTANCE);
+    kits.add(MagicianKit.INSTANCE);
     kits.add(ShulkerKit.INSTANCE);
     //kits.add(SnakeKit.INSTANCE);
     kits.add(CookiemonsterKit.INSTANCE);

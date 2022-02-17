@@ -1,6 +1,6 @@
 package de.hglabor.plugins.kitapi.kit.kits;
 
-/*import de.hglabor.plugins.kitapi.KitApi;
+import de.hglabor.plugins.kitapi.KitApi;
 import de.hglabor.plugins.kitapi.kit.AbstractKit;
 import de.hglabor.plugins.kitapi.kit.events.KitEvent;
 import de.hglabor.plugins.kitapi.kit.settings.FloatArg;
@@ -8,17 +8,16 @@ import de.hglabor.plugins.kitapi.kit.settings.IntArg;
 import de.hglabor.plugins.kitapi.player.KitPlayer;
 import de.hglabor.plugins.kitapi.util.pathfinder.LaborPathfinderMoveToLocation;
 import de.hglabor.utils.noriskutils.pvpbots.PvPBot;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.PathfinderGoalSelector;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
-import org.bukkit.entity.Mob;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -97,24 +96,15 @@ public class MagicianKit extends AbstractKit {
         pvpBot.withMovementSpeed(0.17);
         pvpBot.spawn(player.getLocation().clone().add(0, 1, 0));
         Zombie zombie = pvpBot.getEntity();
-        Mob mob = (Mob) zombie;
-        net.minecraft.world.entity.Mob craftMonster = (net.minecraft.world.entity.Mob) ((CraftEntity) mob).getHandle();
-        clearPathfinders(craftMonster);
-        mob.setTarget(null);
+        net.minecraft.world.entity.Mob craftMonster = (net.minecraft.world.entity.Mob) ((CraftEntity) zombie).getHandle();
+        clearPathfinders(((CraftZombie)zombie).getHandle());
+        zombie.setTarget(null);
         Location location = player.getLocation().clone();
         switch (magicianDirection) {
-          case POSITIVE_X:
-            location.add(15, 1, 0);
-            break;
-          case NEGATIVE_X:
-            location.add(-15, 1, 0);
-            break;
-          case POSITIVE_Z:
-            location.add(0, 1, 15);
-            break;
-          case NEGATIVE_Z:
-            location.add(0, 1, -15);
-            break;
+          case POSITIVE_X -> location.add(15, 1, 0);
+          case NEGATIVE_X -> location.add(-15, 1, 0);
+          case POSITIVE_Z -> location.add(0, 1, 15);
+          case NEGATIVE_Z -> location.add(0, 1, -15);
         }
         craftMonster.goalSelector.addGoal(0, new LaborPathfinderMoveToLocation(location, craftMonster));
         craftMonster.goalSelector.addGoal(1, new FloatGoal(craftMonster));
@@ -123,7 +113,7 @@ public class MagicianKit extends AbstractKit {
           @Override
           public void run() {
             if (System.currentTimeMillis() >= activationTime + durationTime * 1000D || !kitPlayer.isValid()) {
-              pvpBot.die(DamageSource.GENERIC);
+              pvpBot.die(DamageSource.DRY_OUT);
               cancel();
               for (Player p : Bukkit.getOnlinePlayers().stream().filter(it -> it != player).toList()) {
                 p.showPlayer(KitApi.getInstance().getPlugin(), player);
@@ -144,9 +134,9 @@ public class MagicianKit extends AbstractKit {
       }
     }
 
-    private void clearPathfinders(EntityInsentient entity) {
-      entity.goalSelector = new PathfinderGoalSelector(entity.getWorld().getMethodProfilerSupplier());
-      entity.targetSelector = new PathfinderGoalSelector(entity.getWorld().getMethodProfilerSupplier());
+    private void clearPathfinders(net.minecraft.world.entity.monster.Zombie entity) {
+      entity.goalSelector = new GoalSelector(entity.level.getProfilerSupplier());
+      entity.targetSelector = new GoalSelector(entity.level.getProfilerSupplier());
     }
   }
-}*/
+}
