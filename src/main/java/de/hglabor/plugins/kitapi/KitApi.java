@@ -185,7 +185,7 @@ public final class KitApi {
     kits.add(RefillKit.INSTANCE);
     //kits.add(SwordmanKit.INSTANCE);
     kits.add(BearKit.INSTANCE);
-    kits.add(MagicianKit.INSTANCE);
+    //kits.add(MagicianKit.INSTANCE); //broken :(
     kits.add(ShulkerKit.INSTANCE);
     //kits.add(SnakeKit.INSTANCE);
     kits.add(CookiemonsterKit.INSTANCE);
@@ -209,6 +209,7 @@ public final class KitApi {
     kits.add(RedstonerKit.INSTANCE);
     kits.add(JellyfishKit.INSTANCE);
     kits.add(SpyKit.INSTANCE);
+    kits.add(DarknessKit.INSTANCE);
 
 
     kits.add(NonePassive.INSTANCE);

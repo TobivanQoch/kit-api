@@ -145,8 +145,6 @@ public class SpyKit extends AbstractKit implements Listener {
     }
   }
 
-
-
   @Override
   public float getCooldown() {
     return this.cooldown;

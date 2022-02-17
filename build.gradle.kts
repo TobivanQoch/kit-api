@@ -1,7 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import java.nio.file.Files
 
 val repo = "HGLabor/kit-api"
 val javaVersion = "17"
@@ -47,7 +44,7 @@ dependencies {
   compileOnly("org.apache.commons:commons-lang3:3.12.0")
   compileOnly("LibsDisguises:LibsDisguises:10.0.23")
   compileOnly("de.hglabor:localization:0.0.7")
-  compileOnly("de.hglabor:hglabor-utils:0.0.17")
+  compileOnly("de.hglabor:hglabor-utils:1.18.1_v2")
   compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.2.0-SNAPSHOT")
 }
 
