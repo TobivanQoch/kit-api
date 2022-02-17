@@ -18,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -110,6 +111,17 @@ public class SpyKit extends AbstractKit implements Listener {
   }
 
   @EventHandler
+  public void onPlayerTeleport(PlayerTeleportEvent event) {
+    KitPlayer kitPlayer = KitApi.getInstance().getPlayer(event.getPlayer());
+    if (!event.getCause().equals(PlayerTeleportEvent.TeleportCause.SPECTATE)) {
+      return;
+    }
+    if (kitPlayer.hasKit(INSTANCE)) {
+      event.setCancelled(true);
+    }
+  }
+
+  @EventHandler
   @KitEvent(ignoreCooldown = true)
   public void onEntityDamage(EntityDamageEvent event) {
     if(event.getEntity() instanceof ArmorStand) {
@@ -132,6 +144,8 @@ public class SpyKit extends AbstractKit implements Listener {
       }
     }
   }
+
+
 
   @Override
   public float getCooldown() {
