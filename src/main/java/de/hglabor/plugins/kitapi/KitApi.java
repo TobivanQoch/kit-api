@@ -140,7 +140,7 @@ public final class KitApi {
     kits.add(StomperKit.INSTANCE);
     kits.add(DannyKit.INSTANCE);
     kits.add(JackhammerKit.INSTANCE);
-    kits.add(IrongolemKit.INSTANCE);
+    kits.add(GolemKit.INSTANCE);
     kits.add(SwitcherKit.INSTANCE);
     kits.add(SpitKit.INSTANCE);
     kits.add(SquidKit.INSTANCE);
@@ -207,6 +207,8 @@ public final class KitApi {
     kits.add(FrostyKit.INSTANCE);
     kits.add(RedstonerKit.INSTANCE);
     kits.add(JellyfishKit.INSTANCE);
+    kits.add(SpyKit.INSTANCE);
+    kits.add(DarknessKit.INSTANCE);
 
 
     kits.add(NonePassive.INSTANCE);

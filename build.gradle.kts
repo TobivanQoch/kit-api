@@ -8,7 +8,7 @@ val javaVersion = "16"
 val mcVersion = "1.17.1"
 
 group = "de.hglabor"
-version = "${mcVersion}_v2"
+version = "${mcVersion}_v3"
 description = "kit api for hglabor network"
 
 java.targetCompatibility = JavaVersion.valueOf("VERSION_${javaVersion.replace(".", "_")}")
@@ -79,7 +79,18 @@ signing {
   sign(publishing.publications)
 }
 
+publishing {
+  publications {
+    create<MavenPublication>("maven") {
+      this.groupId = project.group.toString()
+      this.artifactId = project.name.toLowerCase()
+      this.version = project.version.toString()
+      from(components["java"])
+    }
+  }
+}
 
+/*
 publishing {
     kotlin.runCatching {
       repositories {
@@ -130,40 +141,7 @@ publishing {
         }
       }
     }
-    create<MavenPublication>("${project.name}Local") {
-      artifact(tasks.reobfJar)
-      artifact(tasks.named("javadocJar"))
-      artifact(tasks.named("sourcesJar"))
-
-      this.groupId = project.group.toString()
-      this.artifactId = project.name.toLowerCase()
-      this.version = "${mcVersion}_LOCAL"
-
-      pom {
-        name.set(project.name)
-        description.set(project.description)
-
-        developers {
-          developer {
-            name.set("copyandexecute")
-          }
-        }
-
-        licenses {
-          license {
-            name.set("GNU General Public License, Version 3")
-            url.set("https://www.gnu.org/licenses/gpl-3.0.en.html")
-          }
-        }
-
-        url.set("https://github.com/${repo}")
-
-        scm {
-          connection.set("scm:git:git://github.com/${repo}.git")
-          url.set("https://github.com/${repo}/tree/main")
-        }
-      }
-    }
   }
 }
 
+ */

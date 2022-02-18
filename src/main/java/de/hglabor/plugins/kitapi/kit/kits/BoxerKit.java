@@ -28,7 +28,7 @@ public class BoxerKit extends AbstractKit {
   public void onPlayerAttacksLivingEntity(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
     if (attacker.getBukkitPlayer().isPresent()) {
       if (attacker.getBukkitPlayer().get().getInventory().getItemInMainHand().getType() == Material.AIR) {
-        event.setDamage(5);
+        event.setDamage(2.5);
       }
     }
   }
