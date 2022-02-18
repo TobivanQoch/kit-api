@@ -149,9 +149,9 @@ public class GhostKit extends AbstractKit implements Listener {
       }
 
       player.getNearbyEntities(10, 10, 10).stream().filter(Player.class::isInstance).forEach(entity -> {
-        entity.getWorld().playSound(player, sound, 1F, 1F);
+        entity.getWorld().playSound(player.getLocation(), sound, 1F, 1F);
       });
-      player.playSound(player, sound, 1F, 1F);
+      player.playSound(player.getLocation(), sound, 1F, 1F);
 
       player.sendActionBar("Ghost-Mode endet in: " + TimeConverter.stringify(timeLeft));
       counter++;
