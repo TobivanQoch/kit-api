@@ -119,16 +119,17 @@ public class GamblerKit extends AbstractKit implements Listener {
     RandomCollection<Consumer<Player>> cantBeClassifiedBad = new RandomCollection<>();
     //INSTANT DEATH
     cantBeClassifiedBad.add("§4§lInstant Death", 0.01, p -> p.teleport(new Location(p.getWorld(), p.getLocation().getX(), -1.0, p.getLocation().getZ())));
-
+    //RANDOM TP
+    cantBeClassifiedBad.add("§9§lRandom TP", 0.3, p -> KitApi.getInstance().getRandomAlivePlayer().getBukkitPlayer().ifPresent(it -> p.teleport(it.getLocation())));
+    //NO GRAVITY
+    cantBeClassifiedBad.add("§c§lNo Gravity", 0.3, p -> p.setGravity(false));
     //TODO MOBS could be classied as mobs lol
     cantBeClassifiedBad.add("§l§2Charged Creeper", 0.1, p -> {
       Creeper creeper = (Creeper) p.getWorld().spawnEntity(p.getLocation(), EntityType.CREEPER);
       creeper.setPowered(true);
     });
-    cantBeClassifiedBad.add("§2Creeper", 0.25, p -> {
-      p.getWorld().spawnEntity(p.getLocation(), EntityType.CREEPER);
-    });
-    cantBeClassifiedBad.add("§7Nix", 0.5, p -> {
+    cantBeClassifiedBad.add("§2Creeper", 0.25, p -> p.getWorld().spawnEntity(p.getLocation(), EntityType.CREEPER));
+    cantBeClassifiedBad.add("§7Nix", 0.5, p -> { // this is no mob
     });
     cantBeClassifiedBad.add("§0Wither", 0.001, p -> {
       p.getWorld().spawnEntity(p.getLocation(), EntityType.WITHER);
@@ -220,7 +221,7 @@ public class GamblerKit extends AbstractKit implements Listener {
       KitApi.getInstance().getPlayer(p), this,
       Collections.singletonList(new ItemStack(Material.ENDER_PEARL, 1))));
 
-    goodItems.add("§bDiamond Sword", 0.25, p -> KitApi.getInstance().giveKitItemsIfInvFull(
+    goodItems.add("§bDiamond Sword", 0.125, p -> KitApi.getInstance().giveKitItemsIfInvFull(
       KitApi.getInstance().getPlayer(p), this,
       Collections.singletonList(new ItemStack(Material.DIAMOND_SWORD, 1))));
     goodItems.add("§6Revive", 0.05, p -> KitApi.getInstance().giveKitItemsIfInvFull(
