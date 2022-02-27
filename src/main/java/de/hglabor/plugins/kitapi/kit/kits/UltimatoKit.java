@@ -2,6 +2,7 @@ package de.hglabor.plugins.kitapi.kit.kits;
 
 import de.hglabor.plugins.kitapi.KitApi;
 import de.hglabor.plugins.kitapi.kit.AbstractKit;
+import de.hglabor.plugins.kitapi.kit.events.KitEvent;
 import de.hglabor.plugins.kitapi.kit.settings.DoubleArg;
 import de.hglabor.plugins.kitapi.kit.settings.FloatArg;
 import de.hglabor.plugins.kitapi.player.KitPlayer;
@@ -27,8 +28,10 @@ public class UltimatoKit extends AbstractKit {
 		super("Ultimato", Material.EMERALD);
 		this.radius = 15.0D;
 		cooldown = 2.0F;
+		setMainKitItem(getDisplayMaterial());
 	}
 
+	@KitEvent
 	@Override
 	public void onHitLivingEntityWithKitItem(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
 		if(!(entity instanceof Player)) {
@@ -49,6 +52,7 @@ public class UltimatoKit extends AbstractKit {
 				if(shouldCancel) {
 					task.cancel();
 					attacker.putKitAttribute(ultimatoFightKey, null);
+					attacker.activateKitCooldown(INSTANCE);
 				}
 			}, 0L, 1L);
 		}
