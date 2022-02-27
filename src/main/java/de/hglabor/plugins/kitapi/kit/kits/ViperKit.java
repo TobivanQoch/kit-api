@@ -12,22 +12,22 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class ViperKit extends AbstractKit {
-  public final static ViperKit INSTANCE = new ViperKit();
-  @IntArg
-  private final int likelihood, effectDuration, effectMultiplier;
+	public final static ViperKit INSTANCE = new ViperKit();
+	@IntArg
+	private final int likelihood, effectDuration, effectMultiplier;
 
-  private ViperKit() {
-    super("Viper", Material.SPIDER_EYE);
-    likelihood = 30;
-    effectDuration = 4;
-    effectMultiplier = 0;
-  }
+	private ViperKit() {
+		super("Viper", Material.SPIDER_EYE);
+		likelihood = 30;
+		effectDuration = 4;
+		effectMultiplier = 0;
+	}
 
-  @KitEvent
-  @Override
-  public void onPlayerAttacksLivingEntity(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
-    if (ChanceUtils.roll(likelihood)) {
-      entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, effectDuration * 20, effectMultiplier, true, true));
-    }
-  }
+	@KitEvent
+	@Override
+	public void onPlayerAttacksLivingEntity(EntityDamageByEntityEvent event, KitPlayer attacker, LivingEntity entity) {
+		if (ChanceUtils.roll(likelihood)) {
+			entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, effectDuration * 20, effectMultiplier, true, true));
+		}
+	}
 }

@@ -30,106 +30,106 @@ import org.bukkit.scheduler.BukkitRunnable;
 import static de.hglabor.utils.localization.Localization.t;
 
 public class PoseidonKit extends AbstractKit {
-  public static final PoseidonKit INSTANCE = new PoseidonKit();
+	public static final PoseidonKit INSTANCE = new PoseidonKit();
 
-  @IntArg(min = 0)
-  private final int rainTime;
-  @IntArg
-  private final int speedAmplifier;
-  @IntArg
-  private final int regenerationAmplifier;
-  private final String rainRunnable;
+	@IntArg(min = 0)
+	private final int rainTime;
+	@IntArg
+	private final int speedAmplifier;
+	@IntArg
+	private final int regenerationAmplifier;
+	private final String rainRunnable;
 
-  private PoseidonKit() {
-    super("Poseidon", new ItemBuilder(Material.TRIDENT).setEnchantment(Enchantment.RIPTIDE, 3).setName("Poseidon").build());
-    rainTime = 25;
-    speedAmplifier = 0;
-    regenerationAmplifier = 0;
-    rainRunnable = this.getName() + "rainRunnable";
-    setKitItemPlaceable(true);
-    setMainKitItem(createPoseidonKitItem());
-  }
+	private PoseidonKit() {
+		super("Poseidon", new ItemBuilder(Material.TRIDENT).setEnchantment(Enchantment.RIPTIDE, 3).setName("Poseidon").build());
+		rainTime = 25;
+		speedAmplifier = 0;
+		regenerationAmplifier = 0;
+		rainRunnable = this.getName() + "rainRunnable";
+		setKitItemPlaceable(true);
+		setMainKitItem(createPoseidonKitItem());
+	}
 
-  private ItemStack createPoseidonKitItem() {
-    net.minecraft.world.item.ItemStack itemStack = CraftItemStack.asNMSCopy(new ItemStack(Material.TRIDENT));
-    ListTag modifiers = new ListTag();
-    CompoundTag compound = new CompoundTag();
-    //Trident Attack Damage should be much lower than default:9 otherwise its too op
-    compound.put("AttributeName", StringTag.valueOf("generic.attackDamage"));
-    compound.put("Name", StringTag.valueOf("generic.attackDamage"));
-    compound.put("Amount", IntTag.valueOf(2));
-    compound.put("Operation", IntTag.valueOf(0));
-    compound.put("UUIDLeast", IntTag.valueOf(894654));
-    compound.put("UUIDMost", IntTag.valueOf(2872));
-    compound.put("Slot", StringTag.valueOf("mainhand"));
-    modifiers.add(compound);
-    compound.put("AttributeModifiers", modifiers);
-    itemStack.setTag(compound);
-    return new ItemBuilder(CraftItemStack.asBukkitCopy(itemStack).clone()).setUnbreakable(true).setEnchantment(Enchantment.RIPTIDE, 3).setName("Poseidon").build();
-  }
+	private ItemStack createPoseidonKitItem() {
+		net.minecraft.world.item.ItemStack itemStack = CraftItemStack.asNMSCopy(new ItemStack(Material.TRIDENT));
+		ListTag modifiers = new ListTag();
+		CompoundTag compound = new CompoundTag();
+		//Trident Attack Damage should be much lower than default:9 otherwise its too op
+		compound.put("AttributeName", StringTag.valueOf("generic.attackDamage"));
+		compound.put("Name", StringTag.valueOf("generic.attackDamage"));
+		compound.put("Amount", IntTag.valueOf(2));
+		compound.put("Operation", IntTag.valueOf(0));
+		compound.put("UUIDLeast", IntTag.valueOf(894654));
+		compound.put("UUIDMost", IntTag.valueOf(2872));
+		compound.put("Slot", StringTag.valueOf("mainhand"));
+		modifiers.add(compound);
+		compound.put("AttributeModifiers", modifiers);
+		itemStack.setTag(compound);
+		return new ItemBuilder(CraftItemStack.asBukkitCopy(itemStack).clone()).setUnbreakable(true).setEnchantment(Enchantment.RIPTIDE, 3).setName("Poseidon").build();
+	}
 
-  @Override
-  public void onDisable(KitPlayer kitPlayer) {
-    if (kitPlayer.getKitAttribute(rainRunnable) != null) {
-      ((PoseidonRain) kitPlayer.getKitAttribute(rainRunnable)).stop();
-    }
-  }
+	@Override
+	public void onDisable(KitPlayer kitPlayer) {
+		if (kitPlayer.getKitAttribute(rainRunnable) != null) {
+			((PoseidonRain) kitPlayer.getKitAttribute(rainRunnable)).stop();
+		}
+	}
 
-  @KitEvent(clazz = PlayerDeathEvent.class)
-  public void onPlayerKillsPlayer(KitPlayer killer, KitPlayer victim) {
-    killer.getBukkitPlayer().ifPresent(player -> {
-      if (killer.getKitAttribute(rainRunnable) != null) {
-        ((PoseidonRain) killer.getKitAttribute(rainRunnable)).addTime(rainTime);
-      } else {
-        PoseidonRain poseidonRain = new PoseidonRain(player);
-        killer.putKitAttribute(rainRunnable, poseidonRain);
-        poseidonRain.runTaskTimer(KitApi.getInstance().getPlugin(), 0, 20);
-      }
-    });
-  }
+	@KitEvent(clazz = PlayerDeathEvent.class)
+	public void onPlayerKillsPlayer(KitPlayer killer, KitPlayer victim) {
+		killer.getBukkitPlayer().ifPresent(player -> {
+			if (killer.getKitAttribute(rainRunnable) != null) {
+				((PoseidonRain) killer.getKitAttribute(rainRunnable)).addTime(rainTime);
+			} else {
+				PoseidonRain poseidonRain = new PoseidonRain(player);
+				killer.putKitAttribute(rainRunnable, poseidonRain);
+				poseidonRain.runTaskTimer(KitApi.getInstance().getPlugin(), 0, 20);
+			}
+		});
+	}
 
-  private final class PoseidonRain extends BukkitRunnable {
-    private final Player player;
-    private final BossBar rainBar;
-    private long endTime;
-    private int timer;
+	private final class PoseidonRain extends BukkitRunnable {
+		private final Player player;
+		private final BossBar rainBar;
+		private long endTime;
+		private int timer;
 
-    private PoseidonRain(Player player) {
-      this.rainBar = Bukkit.createBossBar(t("poseidon.rain", ChatUtils.locale(player)), BarColor.BLUE, BarStyle.SOLID);
-      this.player = player;
-      this.endTime = rainTime;
-      this.startRain();
-    }
+		private PoseidonRain(Player player) {
+			this.rainBar = Bukkit.createBossBar(t("poseidon.rain", ChatUtils.locale(player)), BarColor.BLUE, BarStyle.SOLID);
+			this.player = player;
+			this.endTime = rainTime;
+			this.startRain();
+		}
 
-    private void startRain() {
-      ClientboundGameEventPacket rainPacket = new ClientboundGameEventPacket(ClientboundGameEventPacket.START_RAINING, 0);
-      ((CraftPlayer) player).getHandle().connection.send(rainPacket);
-      rainBar.addPlayer(player);
-    }
+		private void startRain() {
+			ClientboundGameEventPacket rainPacket = new ClientboundGameEventPacket(ClientboundGameEventPacket.START_RAINING, 0);
+			((CraftPlayer) player).getHandle().connection.send(rainPacket);
+			rainBar.addPlayer(player);
+		}
 
-    @Override
-    public void run() {
-      player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 2 * 20, speedAmplifier));
-      player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 2 * 20, regenerationAmplifier));
-      //TODO maybe otherway around
-      double progress = (double) timer / (double) endTime;
-      rainBar.setProgress(Math.min(progress, 1));
-      if (timer > endTime) {
-        stop();
-      }
-      timer++;
-    }
+		@Override
+		public void run() {
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 2 * 20, speedAmplifier));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 2 * 20, regenerationAmplifier));
+			//TODO maybe otherway around
+			double progress = (double) timer / (double) endTime;
+			rainBar.setProgress(Math.min(progress, 1));
+			if (timer > endTime) {
+				stop();
+			}
+			timer++;
+		}
 
-    public void stop() {
-      cancel();
-      ClientboundGameEventPacket rainPacket = new ClientboundGameEventPacket(ClientboundGameEventPacket.STOP_RAINING, 0);
-      ((CraftPlayer) player).getHandle().connection.send(rainPacket);
-      rainBar.removeAll();
-      KitApi.getInstance().getPlayer(player).putKitAttribute(rainRunnable, null);
-    }
+		public void stop() {
+			cancel();
+			ClientboundGameEventPacket rainPacket = new ClientboundGameEventPacket(ClientboundGameEventPacket.STOP_RAINING, 0);
+			((CraftPlayer) player).getHandle().connection.send(rainPacket);
+			rainBar.removeAll();
+			KitApi.getInstance().getPlayer(player).putKitAttribute(rainRunnable, null);
+		}
 
-    public void addTime(int time) {
-      endTime += time;
-    }
-  }
+		public void addTime(int time) {
+			endTime += time;
+		}
+	}
 }

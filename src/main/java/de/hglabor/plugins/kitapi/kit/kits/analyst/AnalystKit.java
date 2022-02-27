@@ -25,70 +25,70 @@ import java.util.List;
 import java.util.Set;
 
 public class AnalystKit extends AbstractKit implements Listener {
-  public final static AnalystKit INSTANCE = new AnalystKit();
-  @FloatArg
-  public final float cooldown;
-  @IntArg
-  private final int hologramKeepAlive;
-  private final Set<Integer> hologramIds;
-  private final String hologramKey;
+	public final static AnalystKit INSTANCE = new AnalystKit();
+	@FloatArg
+	public final float cooldown;
+	@IntArg
+	private final int hologramKeepAlive;
+	private final Set<Integer> hologramIds;
+	private final String hologramKey;
 
-  private AnalystKit() {
-    super("Analyst", Material.GLASS_PANE);
-    setMainKitItem(getDisplayMaterial());
-    hologramIds = new HashSet<>();
-    hologramKeepAlive = 10;
-    cooldown = 60F;
-    hologramKey = this.getName() + "key";
-  }
+	private AnalystKit() {
+		super("Analyst", Material.GLASS_PANE);
+		setMainKitItem(getDisplayMaterial());
+		hologramIds = new HashSet<>();
+		hologramKeepAlive = 10;
+		cooldown = 60F;
+		hologramKey = this.getName() + "key";
+	}
 
-  @Override
-  public void onDeactivation(KitPlayer kitPlayer) {
-    List<AnalystHologram> holograms = kitPlayer.getKitAttributeOrDefault(hologramKey, new ArrayList<>());
-    for (AnalystHologram hologram : holograms) {
-      hologramIds.removeIf(integer -> integer == hologram.getId());
-      hologram.die(DamageSource.GENERIC);
-    }
-  }
+	@Override
+	public void onDeactivation(KitPlayer kitPlayer) {
+		List<AnalystHologram> holograms = kitPlayer.getKitAttributeOrDefault(hologramKey, new ArrayList<>());
+		for (AnalystHologram hologram : holograms) {
+			hologramIds.removeIf(integer -> integer == hologram.getId());
+			hologram.die(DamageSource.GENERIC);
+		}
+	}
 
-  @EventHandler
-  public void onPlayerJoin(PlayerJoinEvent event) {
-    Player player = event.getPlayer();
-    hologramIds.forEach(hologramId -> ((CraftPlayer) player).getHandle().connection.send(new ClientboundRemoveEntitiesPacket(hologramId)));
-  }
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		hologramIds.forEach(hologramId -> ((CraftPlayer) player).getHandle().connection.send(new ClientboundRemoveEntitiesPacket(hologramId)));
+	}
 
-  @KitEvent
-  @Override
-  public void onPlayerRightClickPlayerWithKitItem(PlayerInteractAtEntityEvent event, KitPlayer kitPlayer, Player rightClicked) {
-    Player player = event.getPlayer();
-    double boost = 0.25D;
-    List<AnalystHologram> analystHolograms = new ArrayList<>();
-    for (AnalystHologram.HologramType type : AnalystHologram.HologramType.values()) {
-      boost += 0.25D;
-      World world = rightClicked.getWorld();
-      AnalystHologram analystHologram = new AnalystHologram(world, rightClicked, player, type, boost);
-      analystHolograms.add(analystHologram);
-      hologramIds.add(analystHologram.getId());
-      ((CraftWorld) world).getHandle().addFreshEntity(analystHologram);
-      for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-        if (onlinePlayer == player) {
-          continue;
-        }
-        ((CraftPlayer) onlinePlayer).getHandle().connection.send(new ClientboundRemoveEntitiesPacket(analystHologram.getId()));
-      }
-    }
-    Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> {
-      for (AnalystHologram analystHologram : analystHolograms) {
-        hologramIds.removeIf(integer -> integer == analystHologram.getId());
-        analystHologram.die(DamageSource.GENERIC);
-      }
-    }, hologramKeepAlive * 20L);
-    kitPlayer.putKitAttribute(hologramKey, analystHolograms);
-    kitPlayer.activateKitCooldown(this);
-  }
+	@KitEvent
+	@Override
+	public void onPlayerRightClickPlayerWithKitItem(PlayerInteractAtEntityEvent event, KitPlayer kitPlayer, Player rightClicked) {
+		Player player = event.getPlayer();
+		double boost = 0.25D;
+		List<AnalystHologram> analystHolograms = new ArrayList<>();
+		for (AnalystHologram.HologramType type : AnalystHologram.HologramType.values()) {
+			boost += 0.25D;
+			World world = rightClicked.getWorld();
+			AnalystHologram analystHologram = new AnalystHologram(world, rightClicked, player, type, boost);
+			analystHolograms.add(analystHologram);
+			hologramIds.add(analystHologram.getId());
+			((CraftWorld) world).getHandle().addFreshEntity(analystHologram);
+			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+				if (onlinePlayer == player) {
+					continue;
+				}
+				((CraftPlayer) onlinePlayer).getHandle().connection.send(new ClientboundRemoveEntitiesPacket(analystHologram.getId()));
+			}
+		}
+		Bukkit.getScheduler().runTaskLater(KitApi.getInstance().getPlugin(), () -> {
+			for (AnalystHologram analystHologram : analystHolograms) {
+				hologramIds.removeIf(integer -> integer == analystHologram.getId());
+				analystHologram.die(DamageSource.GENERIC);
+			}
+		}, hologramKeepAlive * 20L);
+		kitPlayer.putKitAttribute(hologramKey, analystHolograms);
+		kitPlayer.activateKitCooldown(this);
+	}
 
-  @Override
-  public float getCooldown() {
-    return cooldown;
-  }
+	@Override
+	public float getCooldown() {
+		return cooldown;
+	}
 }

@@ -12,25 +12,25 @@ import org.bukkit.inventory.ItemStack;
 
 @BetaKit
 public class FiremanKit extends AbstractKit implements Listener {
-  public static final FiremanKit INSTANCE = new FiremanKit();
+	public static final FiremanKit INSTANCE = new FiremanKit();
 
-  private FiremanKit() {
-    super("Fireman", Material.WATER_BUCKET);
-  }
+	private FiremanKit() {
+		super("Fireman", Material.WATER_BUCKET);
+	}
 
-  @Override
-  public void onEnable(KitPlayer kitPlayer) {
-    kitPlayer.getBukkitPlayer().ifPresent(player -> player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET)));
-  }
+	@Override
+	public void onEnable(KitPlayer kitPlayer) {
+		kitPlayer.getBukkitPlayer().ifPresent(player -> player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET)));
+	}
 
-  @KitEvent
-  @Override
-  public void onEntityDamage(EntityDamageEvent event) {
-    if (event.getEntity() instanceof Player player) {
-      if (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
-        event.setCancelled(true);
-        player.setFireTicks(0);
-      }
-    }
-  }
+	@KitEvent
+	@Override
+	public void onEntityDamage(EntityDamageEvent event) {
+		if (event.getEntity() instanceof Player player) {
+			if (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
+				event.setCancelled(true);
+				player.setFireTicks(0);
+			}
+		}
+	}
 }

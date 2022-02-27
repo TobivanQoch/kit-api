@@ -71,9 +71,7 @@ java {
   withJavadocJar()
 }
 
-signing {
-  sign(publishing.publications)
-}
+
 
 publishing {
   publications {

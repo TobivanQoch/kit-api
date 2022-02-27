@@ -10,66 +10,66 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class LaborPathfinderGhastAttack extends Goal {
-  private final Ghast ghast;
-  public int chargeTime;
+	private final Ghast ghast;
+	public int chargeTime;
 
-  public LaborPathfinderGhastAttack(Ghast ghast) {
-    this.ghast = ghast;
-  }
+	public LaborPathfinderGhastAttack(Ghast ghast) {
+		this.ghast = ghast;
+	}
 
-  @Override
-  public boolean canUse() {
-    return this.ghast.getTarget() != null;
-  }
+	@Override
+	public boolean canUse() {
+		return this.ghast.getTarget() != null;
+	}
 
-  @Override
-  public void start() {
-    this.chargeTime = 0;
-  }
+	@Override
+	public void start() {
+		this.chargeTime = 0;
+	}
 
-  @Override
-  public void stop() {
-    this.ghast.setCharging(false);
-  }
+	@Override
+	public void stop() {
+		this.ghast.setCharging(false);
+	}
 
-  @Override
-  public void tick() {
-    LivingEntity entityliving = this.ghast.getTarget();
-    double d0 = 64.0D;
+	@Override
+	public void tick() {
+		LivingEntity entityliving = this.ghast.getTarget();
+		double d0 = 64.0D;
 
-    if (entityliving == null) return;
+		if (entityliving == null) return;
 
-    if (entityliving.distanceToSqr((Entity) this.ghast) < 4096.0D && this.ghast.hasLineOfSight(entityliving)) {
-      Level world = this.ghast.level;
+		if (entityliving.distanceToSqr((Entity) this.ghast) < 4096.0D && this.ghast.hasLineOfSight(entityliving)) {
+			Level world = this.ghast.level;
 
-      ++this.chargeTime;
-      if (this.chargeTime == 10 && !this.ghast.isSilent()) {
-        world.levelEvent((Player) null, 1015, this.ghast.blockPosition(), 0);
-      }
+			++this.chargeTime;
+			if (this.chargeTime == 10 && !this.ghast.isSilent()) {
+				world.levelEvent((Player) null, 1015, this.ghast.blockPosition(), 0);
+			}
 
-      if (this.chargeTime == 20) {
-        double d1 = 4.0D;
-        Vec3 vec3d = this.ghast.getViewVector(1.0F);
-        double d2 = entityliving.getX() - (this.ghast.getX() + vec3d.x * 4.0D);
-        double d3 = entityliving.getY(0.5D) - (0.5D + this.ghast.getY(0.5D));
-        double d4 = entityliving.getZ() - (this.ghast.getZ() + vec3d.z * 4.0D);
+			if (this.chargeTime == 20) {
+				double d1 = 4.0D;
+				Vec3 vec3d = this.ghast.getViewVector(1.0F);
+				double d2 = entityliving.getX() - (this.ghast.getX() + vec3d.x * 4.0D);
+				double d3 = entityliving.getY(0.5D) - (0.5D + this.ghast.getY(0.5D));
+				double d4 = entityliving.getZ() - (this.ghast.getZ() + vec3d.z * 4.0D);
 
-        if (!this.ghast.isSilent()) {
-          world.levelEvent((Player) null, 1016, this.ghast.blockPosition(), 0);
-        }
+				if (!this.ghast.isSilent()) {
+					world.levelEvent((Player) null, 1016, this.ghast.blockPosition(), 0);
+				}
 
-        LargeFireball entitylargefireball = new LargeFireball(world, this.ghast, d2, d3, d4, this.ghast.getExplosionPower());
+				LargeFireball entitylargefireball = new LargeFireball(world, this.ghast, d2, d3, d4, this.ghast.getExplosionPower());
 
-        // CraftBukkit - set bukkitYield when setting explosionpower
-        entitylargefireball.bukkitYield = entitylargefireball.explosionPower = this.ghast.getExplosionPower();
-        entitylargefireball.setPos(this.ghast.getX() + vec3d.x * 4.0D, this.ghast.getY(0.5D) + 0.5D, entitylargefireball.getZ() + vec3d.z * 4.0D);
-        world.addFreshEntity(entitylargefireball);
-        this.chargeTime = -40;
-      }
-    } else if (this.chargeTime > 0) {
-      --this.chargeTime;
-    }
+				// CraftBukkit - set bukkitYield when setting explosionpower
+				entitylargefireball.bukkitYield = entitylargefireball.explosionPower = this.ghast.getExplosionPower();
+				entitylargefireball.setPos(this.ghast.getX() + vec3d.x * 4.0D, this.ghast.getY(0.5D) + 0.5D, entitylargefireball.getZ() + vec3d.z * 4.0D);
+				world.addFreshEntity(entitylargefireball);
+				this.chargeTime = -40;
+			}
+		} else if (this.chargeTime > 0) {
+			--this.chargeTime;
+		}
 
-    this.ghast.setCharging(this.chargeTime > 10);
-  }
+		this.ghast.setCharging(this.chargeTime > 10);
+	}
 }
