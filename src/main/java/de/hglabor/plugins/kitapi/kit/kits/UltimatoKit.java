@@ -116,10 +116,10 @@ public class UltimatoKit extends AbstractKit {
 			for (Entity otherEntities : attacker.getNearbyEntities(radius, radius, radius)) {
 				if(otherEntities.getLocation().distance(attacker.getLocation()) >= radius) {
 					Vector direction = attacker.getLocation().toVector().subtract(otherEntities.getLocation().toVector()).normalize();
-					if(otherEntities != victim) {
+					if(otherEntities == victim) {
 						otherEntities.setVelocity(direction.multiply(getStrength()));
 					} else {
-						otherEntities.setVelocity(direction.multiply(-(getStrength()*2)));
+						otherEntities.setVelocity(direction.multiply(-(getStrength()/2)));
 					}
 				}
 			}
