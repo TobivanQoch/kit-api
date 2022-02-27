@@ -67,6 +67,7 @@ public class GamblerKit extends AbstractKit implements Listener {
 			gambleWin.end();
 		}
 		kitPlayer.getBukkitPlayer().ifPresent(player -> {
+			player.setGravity(true);
 			for (Tameable tameable : player.getWorld().getEntitiesByClass(Tameable.class)) {
 				if (tameable.getOwnerUniqueId() != null && tameable.getOwnerUniqueId().equals(player.getUniqueId())) {
 					if (tameable.hasMetadata(gamblerAnimal)) {
