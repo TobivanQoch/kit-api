@@ -22,13 +22,17 @@ public class UltimatoKit extends AbstractKit {
 	@DoubleArg
 	private final double radius;
 
+	@DoubleArg
+	private final double strength;
+
 	@FloatArg
 	private final float cooldown;
 
 	private UltimatoKit() {
 		super("Ultimato", Material.EMERALD);
 		this.radius = 10.0D;
-		cooldown = 2.0F;
+		this.strength = 2.3;
+		this.cooldown = 2.0F;
 		setMainKitItem(getDisplayMaterial());
 	}
 
@@ -38,6 +42,7 @@ public class UltimatoKit extends AbstractKit {
 		if(!(entity instanceof Player)) {
 			return;
 		}
+		KitPlayer kitPlayerEntity = KitApi.getInstance().getPlayer((Player) entity);
 		if(attacker.getBukkitPlayer().isEmpty()) {
 			return;
 		}
@@ -46,13 +51,15 @@ public class UltimatoKit extends AbstractKit {
 				attacker.getBukkitPlayer().ifPresent(player -> player.sendMessage(ChatColor.RED + "You can't attack someone who is already in a fight"));
 				return;
 			}
-			Fight fight = new Fight(attacker.getBukkitPlayer().get(), (Player) entity, radius);
+			Fight fight = new Fight(attacker.getBukkitPlayer().get(), (Player) entity, radius, strength);
 			entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1f, 1f);
+			kitPlayerEntity.putKitAttribute(ultimatoFightKey, fight);
 			attacker.putKitAttribute(ultimatoFightKey, fight);
 			Bukkit.getScheduler().runTaskTimer(KitApi.getInstance().getPlugin(), (task) -> {
 				boolean shouldCancel = fight.tick();
 				if(shouldCancel) {
 					task.cancel();
+					kitPlayerEntity.putKitAttribute(ultimatoFightKey, null);
 					attacker.putKitAttribute(ultimatoFightKey, null);
 					attacker.activateKitCooldown(INSTANCE);
 				}
@@ -72,11 +79,13 @@ public class UltimatoKit extends AbstractKit {
 		private final Player attacker;
 		private final Player victim;
 		private final double radius;
+		private final double strength;
 
-		public Fight(Player attacker, Player victim, double radius) {
+		public Fight(Player attacker, Player victim, double radius, double strength) {
 			this.attacker = attacker;
 			this.victim = victim;
 			this.radius = radius;
+			this.strength = strength;
 		}
 
 		public Player getAttacker() {
@@ -91,6 +100,10 @@ public class UltimatoKit extends AbstractKit {
 			return radius;
 		}
 
+		public double getStrength() {
+			return strength;
+		}
+
 		/**
 		 * @return true if the task can be cancelled
 		 */
@@ -103,7 +116,11 @@ public class UltimatoKit extends AbstractKit {
 			for (Entity otherEntities : attacker.getNearbyEntities(radius, radius, radius)) {
 				if(otherEntities.getLocation().distance(attacker.getLocation()) >= radius) {
 					Vector direction = attacker.getLocation().toVector().subtract(otherEntities.getLocation().toVector()).normalize();
-					otherEntities.setVelocity(direction.multiply(1.2));
+					if(otherEntities != victim) {
+						otherEntities.setVelocity(direction.multiply(getStrength()));
+					} else {
+						otherEntities.setVelocity(direction.multiply(-(getStrength()*2)));
+					}
 				}
 			}
 			Utils.drawCircle(radius, getAttacker().getLocation(), Particle.REDSTONE, new Particle.DustOptions(Color.RED, 1f));
