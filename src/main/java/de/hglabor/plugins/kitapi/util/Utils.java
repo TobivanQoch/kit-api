@@ -2,8 +2,11 @@ package de.hglabor.plugins.kitapi.util;
 
 import de.hglabor.plugins.kitapi.kit.AbstractKit;
 import de.hglabor.plugins.kitapi.kit.config.KitMetaData;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -46,5 +49,15 @@ public final class Utils {
 
   public static <I> List<I> cloneList(List<I> list) {
     return new ArrayList<>(list);
+  }
+
+  public static  <T> void drawCircle(double radius, Location center, Particle particle, @Nullable T particleData) {
+    for (double i = 0; i < 0.5; i++) {
+      for (double y = 0.0; y < (Math.PI * 2); y += .1) {
+        double x = radius * Math.cos(y);
+        double z = radius * Math.sin(y);
+        center.getWorld().spawnParticle(particle, center.clone().add(x, i / 4, z), 0, 0, 0, 0, 5, particleData);
+      }
+    }
   }
 }
