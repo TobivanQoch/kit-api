@@ -129,8 +129,8 @@ public class UltimatoKit extends AbstractKit {
 					}
 				}
 			}
-			Utils.drawCircle(radius, getAttacker().getLocation(), Particle.REDSTONE, new Particle.DustOptions(Color.RED, 1f));
-			Utils.drawCircle(radius, getAttacker().getLocation().clone().add(0, 1, 0), Particle.REDSTONE, new Particle.DustOptions(Color.RED, 1f));
+			Utils.drawCircle(radius, getCenter(), Particle.REDSTONE, new Particle.DustOptions(Color.RED, 1f));
+			Utils.drawCircle(radius, getCenter().clone().add(0, 1, 0), Particle.REDSTONE, new Particle.DustOptions(Color.RED, 1f));
 			return false;
 		}
 	}
