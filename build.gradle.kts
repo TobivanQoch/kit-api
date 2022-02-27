@@ -71,9 +71,14 @@ java {
   withJavadocJar()
 }
 
-signing {
-	sign(publishing.publications)
+kotlin.runCatching {
+	signing {
+		sign(publishing.publications)
+	}
+}.onFailure {
+	println("Signing failed!")
 }
+
 
 publishing {
   publications {
