@@ -47,7 +47,7 @@ public class UltimatoKit extends AbstractKit {
 			return;
 		}
 		if(attacker.getKitAttribute(ultimatoFightKey) == null) {
-			if(attacker.getKitAttribute(ultimatoFightKey) != null) {
+			if(kitPlayerEntity.getKitAttribute(ultimatoFightKey) != null) {
 				attacker.getBukkitPlayer().ifPresent(player -> player.sendMessage(ChatColor.RED + "You can't attack someone who is already in a fight"));
 				return;
 			}
