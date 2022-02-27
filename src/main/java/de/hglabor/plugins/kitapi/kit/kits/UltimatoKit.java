@@ -51,7 +51,7 @@ public class UltimatoKit extends AbstractKit {
 				attacker.getBukkitPlayer().ifPresent(player -> player.sendMessage(ChatColor.RED + "You can't attack someone who is already in a fight"));
 				return;
 			}
-			Fight fight = new Fight(attacker.getBukkitPlayer().get(), (Player) entity, radius, strength);
+			Fight fight = new Fight(attacker.getBukkitPlayer().get(), (Player) entity, radius, strength, attacker.getBukkitPlayer().get().getLocation());
 			entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1f, 1f);
 			kitPlayerEntity.putKitAttribute(ultimatoFightKey, fight);
 			attacker.putKitAttribute(ultimatoFightKey, fight);
@@ -80,12 +80,14 @@ public class UltimatoKit extends AbstractKit {
 		private final Player victim;
 		private final double radius;
 		private final double strength;
+		private final Location center;
 
-		public Fight(Player attacker, Player victim, double radius, double strength) {
+		public Fight(Player attacker, Player victim, double radius, double strength, Location center) {
 			this.attacker = attacker;
 			this.victim = victim;
 			this.radius = radius;
 			this.strength = strength;
+			this.center = center;
 		}
 
 		public Player getAttacker() {
@@ -104,6 +106,10 @@ public class UltimatoKit extends AbstractKit {
 			return strength;
 		}
 
+		public Location getCenter() {
+			return center;
+		}
+
 		/**
 		 * @return true if the task can be cancelled
 		 */
@@ -113,10 +119,10 @@ public class UltimatoKit extends AbstractKit {
 			if(!attackerKitPlayer.isValid() || !victimKitPlayer.isValid()) {
 				return true;
 			}
-			for (Entity otherEntities : attacker.getNearbyEntities(radius, radius, radius)) {
-				if(otherEntities.getLocation().distance(attacker.getLocation()) >= radius) {
-					Vector direction = attacker.getLocation().toVector().subtract(otherEntities.getLocation().toVector()).normalize();
-					if(otherEntities == victim) {
+			for (Entity otherEntities : center.getNearbyEntities(radius, radius, radius)) {
+				if(otherEntities.getLocation().distance(center) >= radius) {
+					Vector direction = center.toVector().subtract(otherEntities.getLocation().toVector()).normalize();
+					if(otherEntities == victim || otherEntities == attacker) {
 						otherEntities.setVelocity(direction.multiply(getStrength()));
 					} else {
 						otherEntities.setVelocity(direction.multiply(-(getStrength()/2)));
