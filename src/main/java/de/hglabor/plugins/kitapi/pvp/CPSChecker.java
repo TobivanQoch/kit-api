@@ -12,25 +12,25 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class CPSChecker implements Listener {
 
-  @EventHandler
-  public void onPlayerInteract(PlayerInteractEvent event) {
-    if (event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-      // KitApi.getInstance().getPlayer(event.getPlayer()).addLeftClick(System.currentTimeMillis());
-    }
-  }
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+			// KitApi.getInstance().getPlayer(event.getPlayer()).addLeftClick(System.currentTimeMillis());
+		}
+	}
 
-  @EventHandler
-  public void onPlayerAnimation(PlayerAnimationEvent event) {
-    if (event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
-      KitApi.getInstance().getPlayer(event.getPlayer()).addLeftClick(System.currentTimeMillis());
-    }
-  }
+	@EventHandler
+	public void onPlayerAnimation(PlayerAnimationEvent event) {
+		if (event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
+			KitApi.getInstance().getPlayer(event.getPlayer()).addLeftClick(System.currentTimeMillis());
+		}
+	}
 
-  @EventHandler
-  public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-    if (!(event.getDamager() instanceof Player)) {
-      return;
-    }
-    KitApi.getInstance().getPlayer((Player) event.getDamager()).addLeftClick(System.currentTimeMillis());
-  }
+	@EventHandler
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+		if (!(event.getDamager() instanceof Player)) {
+			return;
+		}
+		KitApi.getInstance().getPlayer((Player) event.getDamager()).addLeftClick(System.currentTimeMillis());
+	}
 }

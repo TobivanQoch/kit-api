@@ -13,21 +13,21 @@ import org.bukkit.potion.PotionEffectType;
 
 public class NoCleanPassive extends Passive implements Listener {
 
-  public static final NoCleanPassive INSTANCE = new NoCleanPassive();
+	public static final NoCleanPassive INSTANCE = new NoCleanPassive();
 
-  private NoCleanPassive() {
-    super("NoClean", Material.IRON_SWORD);
-  }
+	private NoCleanPassive() {
+		super("NoClean", Material.IRON_SWORD);
+	}
 
-  @EventHandler
-  public void onPlayerDeath(PlayerDeathEvent event) {
-    Player player = event.getEntity().getKiller();
-    if (player != null && hasPassive(KitApi.getInstance().getPlayer(player))) {
-      player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 3000));
-    }
-  }
+	@EventHandler
+	public void onPlayerDeath(PlayerDeathEvent event) {
+		Player player = event.getEntity().getKiller();
+		if (player != null && hasPassive(KitApi.getInstance().getPlayer(player))) {
+			player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 3000));
+		}
+	}
 
-  private boolean hasPassive(KitPlayer kitPlayer) {
-    return kitPlayer.getPassive().equals(NoCleanPassive.INSTANCE);
-  }
+	private boolean hasPassive(KitPlayer kitPlayer) {
+		return kitPlayer.getPassive().equals(NoCleanPassive.INSTANCE);
+	}
 }

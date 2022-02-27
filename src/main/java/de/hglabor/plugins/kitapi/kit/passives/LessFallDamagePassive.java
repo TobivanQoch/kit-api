@@ -12,28 +12,28 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class LessFallDamagePassive extends Passive implements Listener {
 
-  public static final LessFallDamagePassive INSTANCE = new LessFallDamagePassive();
+	public static final LessFallDamagePassive INSTANCE = new LessFallDamagePassive();
 
-  @DoubleArg
-  public double reduce;
+	@DoubleArg
+	public double reduce;
 
-  private LessFallDamagePassive() {
-    super("LessFallDamage", Material.GOLDEN_BOOTS);
-    this.reduce = 0.60;
-  }
+	private LessFallDamagePassive() {
+		super("LessFallDamage", Material.GOLDEN_BOOTS);
+		this.reduce = 0.60;
+	}
 
-  @EventHandler
-  public void onEntityDamage(EntityDamageEvent event) {
-    if (event.getEntity() instanceof Player) {
-      if (hasPassive(KitApi.getInstance().getPlayer((Player) event.getEntity()))) {
-        if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
-          event.setDamage(event.getDamage() * this.reduce);
-        }
-      }
-    }
-  }
+	@EventHandler
+	public void onEntityDamage(EntityDamageEvent event) {
+		if (event.getEntity() instanceof Player) {
+			if (hasPassive(KitApi.getInstance().getPlayer((Player) event.getEntity()))) {
+				if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+					event.setDamage(event.getDamage() * this.reduce);
+				}
+			}
+		}
+	}
 
-  private boolean hasPassive(KitPlayer kitPlayer) {
-    return kitPlayer.getPassive().equals(LessFallDamagePassive.INSTANCE);
-  }
+	private boolean hasPassive(KitPlayer kitPlayer) {
+		return kitPlayer.getPassive().equals(LessFallDamagePassive.INSTANCE);
+	}
 }

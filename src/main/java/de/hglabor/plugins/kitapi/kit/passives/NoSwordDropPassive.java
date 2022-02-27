@@ -13,27 +13,27 @@ import java.util.Arrays;
 
 public class NoSwordDropPassive extends Passive implements Listener {
 
-  public static final NoSwordDropPassive INSTANCE = new NoSwordDropPassive();
+	public static final NoSwordDropPassive INSTANCE = new NoSwordDropPassive();
 
-  private NoSwordDropPassive() {
-    super("NoSwordDrop", Material.STONE_SWORD);
-  }
+	private NoSwordDropPassive() {
+		super("NoSwordDrop", Material.STONE_SWORD);
+	}
 
-  @EventHandler
-  public void onDropItem(PlayerDropItemEvent event) {
-    KitPlayer kitPlayer = KitApi.getInstance().getPlayer(event.getPlayer());
-    if (hasPassive(kitPlayer)) {
-      Material item = event.getItemDrop().getItemStack().getType();
-      ArrayList<Material> prohibitedItems = new ArrayList<>(Arrays.stream(Material.values()).filter(material -> material.name().contains("SWORD")).toList());
-      if (prohibitedItems.contains(item)) {
-        if (kitPlayer.isInCombat()) {
-          event.setCancelled(true);
-        }
-      }
-    }
-  }
+	@EventHandler
+	public void onDropItem(PlayerDropItemEvent event) {
+		KitPlayer kitPlayer = KitApi.getInstance().getPlayer(event.getPlayer());
+		if (hasPassive(kitPlayer)) {
+			Material item = event.getItemDrop().getItemStack().getType();
+			ArrayList<Material> prohibitedItems = new ArrayList<>(Arrays.stream(Material.values()).filter(material -> material.name().contains("SWORD")).toList());
+			if (prohibitedItems.contains(item)) {
+				if (kitPlayer.isInCombat()) {
+					event.setCancelled(true);
+				}
+			}
+		}
+	}
 
-  private boolean hasPassive(KitPlayer kitPlayer) {
-    return kitPlayer.getPassive().equals(NoSwordDropPassive.INSTANCE);
-  }
+	private boolean hasPassive(KitPlayer kitPlayer) {
+		return kitPlayer.getPassive().equals(NoSwordDropPassive.INSTANCE);
+	}
 }
