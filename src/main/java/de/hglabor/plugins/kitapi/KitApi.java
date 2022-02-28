@@ -216,9 +216,8 @@ public final class KitApi {
     kits.add(NonePassive.INSTANCE);
     kits.add(FastBreakPassive.INSTANCE);
     kits.add(GravediggerPassive.INSTANCE);
-    //kits.add(NoSwordDropPassive.INSTANCE); broken because of shop-api
+    kits.add(NoSwordDropPassive.INSTANCE);
     kits.add(NoSoupDropPassive.INSTANCE);
-    //kits.add(RecraftToInvPassive.INSTANCE); must be implemented in the project itself
     kits.add(PeacemakerPassive.INSTANCE);
     kits.add(NoCleanPassive.INSTANCE);
     kits.add(LessFallDamagePassive.INSTANCE);
