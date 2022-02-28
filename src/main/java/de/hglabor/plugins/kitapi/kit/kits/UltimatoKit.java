@@ -119,6 +119,9 @@ public class UltimatoKit extends AbstractKit {
       if(!attackerKitPlayer.isValid() || !victimKitPlayer.isValid()) {
         return true;
       }
+      if(attackerKitPlayer.areKitsDisabled()) {
+        return true;
+      }
       for (Entity otherEntities : center.getNearbyEntities(radius, radius, radius)) {
         if(otherEntities.getLocation().distance(center) >= radius) {
           Vector direction = center.toVector().subtract(otherEntities.getLocation().toVector()).normalize();
