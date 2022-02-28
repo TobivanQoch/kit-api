@@ -26,7 +26,7 @@ public class StomperKit extends AbstractKit {
   @Override
   public void onEnable(KitPlayer kitPlayer) {
     if(kitPlayer.hasKit(GravityKit.INSTANCE) || kitPlayer.hasKit(GrapplerKit.INSTANCE) || kitPlayer.hasKit(GhostKit.INSTANCE) || kitPlayer.hasKit(ElytraKit.INSTANCE)) {
-      onDeactivation(kitPlayer);
+      kitPlayer.disableKits(true);
       kitPlayer.getBukkitPlayer().get().sendMessage(ChatColor.RED + "Unallowed kit combo!");
     }
   }
